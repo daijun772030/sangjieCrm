@@ -35,11 +35,10 @@ export default {
     //   login
     },
     created() {
-        // this.$router.replace({ path: '/manager/order' });
+        this.$router.replace({ path: '/manager/finance/aptitude' });
     }
 }
 </script>
-
 <style lang="less" scoped>
 @import "../animate.css";
 #app {

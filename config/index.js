@@ -17,6 +17,13 @@ module.exports = {
                 pathRewrite: {
                     '^/api': ''
                 }
+            },
+            '/test': {
+                target: "http://192.168.0.124:8081/",
+                changeOrigin: true, // 是否跨域
+                pathRewrite: {
+                    '^/test': ''
+                }
             }
         },
 

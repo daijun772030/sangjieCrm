@@ -32,8 +32,8 @@ const create = function() {
     // 响应拦截器
     http.interceptors.response.use(response => {
         // debugger;
-        return response;
         // 响应状态统一处理
+        return response;
         // if (response.data.retCode == 200) {
         //     return response;
         // } else if (response.data.retCode == -200) {
@@ -92,7 +92,10 @@ const apis = {
     discountAddDis: post('/discount/addDiscount'), //新增打折优惠
     discountFull: post('/discount/addDiscountByFull'), //新增满减优惠
     deledDiscount: post('/discount/delteDiscount'), //删除优惠
-    updateDiscount: post('/discount/updateDiscount') //修改优惠
+    updateDiscount: post('/discount/updateDiscount'), //修改优惠
+
+    // 商家认证
+    archives: get("/archives/all") //所有商家认证
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);
