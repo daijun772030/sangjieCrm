@@ -6,7 +6,7 @@
 export default {
     data(){
         return {
-            index : "login"
+            index : "manager"
         }
     },
     created(){

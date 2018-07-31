@@ -95,7 +95,9 @@ const apis = {
     updateDiscount: post('/discount/updateDiscount'), //修改优惠
 
     // 商家认证
-    archives: get("/archives/all") //所有商家认证
+    archives: get("/archives/all"), //所有商家认证
+    //审核通过或不通过
+    upArchives: post('/archives/updateByArchivesStatus')
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);
