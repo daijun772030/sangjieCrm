@@ -76,9 +76,17 @@ export default {
     this.$api("archives",{params:{pageNum:"1",pageSize:"10"}}).then((res)=>{//查询所有资质
       // console.log(res.data.data.list)
       this.list = res.data.data.list
+    });
+    this.$api("network",{phone:"13666288963",type:"2"}).then((res)=>{
+      console.log(res)
     })
   },
   methods: {
+    cs () {
+      this.$api("network",{phone:"13666288963",type:"2"}).then((res)=>{
+        console.log(res)
+      })
+    },
     close(pass){//弹窗消失
     pass.passText=null;
     pass.passVisible=false
@@ -124,7 +132,6 @@ export default {
   handleCurrentChange (val) {
     console.log(val)
   }
-
 }
 </script>
 <style long="less">

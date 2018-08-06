@@ -79,6 +79,8 @@ const apis = {
     //商户后台登录的接口
     login: post('/merchant/login'),
     cancellation: get('/merchant/cancellation'),
+    //注册送好礼接口
+    network: post('/archives/network'),
     //商品接口
     myshop: get('/commodity/all'), //查询所有商品
     addshop: post('/commodity/addCommodity'), //添加商品
