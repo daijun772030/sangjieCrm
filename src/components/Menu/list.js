@@ -19,6 +19,15 @@ export default [{
             },
 
         ]
+    },
+    {
+        id: "1",
+        name: "boss圈",
+        path: "invitation",
+        icon: 'resource',
+        children: [
+            { id: 0, name: "帖子管理", path: 'examine', icon: 'resource', children: [] }
+        ]
     }
 
 ];

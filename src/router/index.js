@@ -14,6 +14,10 @@ const Aptitude = () =>
     import ('@/pages/finance/aptitude/aptitude' /* webpackChunkName: "pages/finance/aptitude/aptitude" */ ).then(m => m.default || m)
 const Store = () =>
     import ('@/pages/finance/store/store' /* webpackChunkName: "pages/finance/store/store" */ ).then(m => m.default || m)
+const Invitation = () =>
+    import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
+const Examine = () =>
+    import ('@/pages/invitation/examine/examine' /* webpackChunkName: "pages/invitation/examine/examine" */ )
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -56,14 +60,23 @@ const router = new Router({
                 path: 'manager',
                 component: Manager,
                 children: [{
-                    name: 'finance',
-                    path: 'finance',
-                    component: Fanance,
-                    children: [
-                        { name: 'finance-aptitude', path: 'aptitude', component: Aptitude },
-                        { name: 'finance-store', path: 'store', component: Store }
-                    ]
-                }]
+                        name: 'finance',
+                        path: 'finance',
+                        component: Fanance,
+                        children: [
+                            { name: 'finance-aptitude', path: 'aptitude', component: Aptitude },
+                            { name: 'finance-store', path: 'store', component: Store }
+                        ]
+                    },
+                    {
+                        name: 'invitation',
+                        path: 'invitation',
+                        component: Invitation,
+                        children: [
+                            { name: 'invitation-examine', path: 'examine', component: Examine }
+                        ]
+                    }
+                ]
             }
         ]
     }]

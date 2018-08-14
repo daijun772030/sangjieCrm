@@ -95,11 +95,15 @@ const apis = {
     discountFull: post('/discount/addDiscountByFull'), //新增满减优惠
     deledDiscount: post('/discount/delteDiscount'), //删除优惠
     updateDiscount: post('/discount/updateDiscount'), //修改优惠
-
     // 商家认证
     archives: get("/archives/all"), //所有商家认证
     //审核通过或不通过
-    upArchives: post('/archives/updateByArchivesStatus')
+    upArchives: post('/archives/updateByArchivesStatus'),
+    //boss圈查询所有帖子
+    queryAll: get("/archives/findByMessageAll"),
+    //删除boss圈对应帖子
+    deleteStatus: get("/archives/updateMessageStatus")
+
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);
