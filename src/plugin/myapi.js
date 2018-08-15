@@ -102,7 +102,9 @@ const apis = {
     //boss圈查询所有帖子
     queryAll: get("/archives/findByMessageAll"),
     //删除boss圈对应帖子
-    deleteStatus: get("/archives/updateMessageStatus")
+    deleteStatus: get("/archives/updateMessageStatus"),
+    //搜索boss圈对应的帖子
+    messageAll: get("/archives/findByMessageAll")
 
 }
 const request = function(name, data, config) {
