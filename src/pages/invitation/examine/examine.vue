@@ -28,7 +28,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="title" label="帖子标题" align="center"></el-table-column>
-      <el-table-column prop="messageText" label="帖子文字内容" align="center"></el-table-column>
+      <el-table-column prop="messageText" label="帖子文字内容" align="center" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="img" label="帖子图片内容" align="center">
         <template slot-scope="scope">
           <img v-bind:src="'/test' + item" alt="帖子图片详情" class="itemImage" v-for="(item,index) in scope.row.img" :key="index" @click="image(scope)">
@@ -59,6 +59,7 @@
         :total="searchObj.totalCount">
       </el-pagination>
     </div>
+    <audio src="../../../../static/audio/newgoods.mp3" loop='false' id="music" hidden></audio>
   </div>
 </template>
 <script>
@@ -67,6 +68,9 @@ export default {
   data () {
     return {
       arrObj:[],
+      autoplay:'',
+      playFlay:false,
+      // autoplay:'autoplay',
       formObj:{
         id:null,
         name:null,
@@ -87,30 +91,44 @@ export default {
   },
   created () {
     this.query();
-    setInterval(() => {
+    this.timer = setInterval(()=>{
+      // debugger;
+      this.intav();
+    },10000000)
+  },
+  // mounted () {
+  //   this.intav();
+  //   setInterval(this.intav,15000)
+  // },
+  methods: {
+    intav() {  //这里做列表的轮询。。查看是不是有新订单
+      var audio = document.getElementById('music');
+      // var start = 0;
+      // var timers = 2
       this.query()
       this.arrObj.push(this.searchObj.totalCount)
-      var length = this.arrObj.length;
-      if(length>=3) {
-          this.arrObj.splice(0, 1)
-          console.log(length)
+      var a = this.arrObj;
+      if(a.length>=3){
+        a.shift();
+      console.log(a)
+      this.arrObj = a;
+      }
+      if(this.arrObj.length==2) {
+        console.log(this.autoplay)
+        // this.autoplay = "";
+        console.log(this.autoplay)
+        var length = this.arrObj.length
+        if(this.arrObj[length-1] - this.arrObj[length-2]==0) {
+          // debugger
+          // this.autoplay = "autoplay"
+          console.log("不提示")
+            //  audio.pause();
+        }else{
+          console.log('提示');
+          audio.play();
         }
-        if(this.arrObj.length>=2) {
-          // debugger;
-        if(length>1) {
-        if(this.arrObj[length-1] - this.arrObj[length-2] ==0) {
-        console.log("不做改变")
-      }else if(this.arrObj[length-1] - this.arrObj[length-2] !==0){
-        console.log("这是改变了")
       }
-      }
-      }
-      console.log(this.arrObj)
-      console.log(this.searchObj.totalCount)
-    }, 1000000)
-    
-  },
-  methods: {
+    },
     modf() {//分解图片得函数
        for(var i=0;i<this.list.length;i++) {
           var a  = this.list[i].img.split(',')
@@ -128,10 +146,14 @@ export default {
       this.img = scope.row.img;
       this.dialogTableVisible = true;
     },
+    messText(scope) {//查看帖子详情
+    debugger;
+      console.log(scope);
+    },
     remove (scope) {//删除帖子
       console.log(scope)
       this.$api("deleteStatus",{params:{messageid:scope.id}}).then((res)=>{
-        // debugger;
+
         if(res.data.retCode==200) {
           this.$message("删除成功")
         }else{
@@ -141,12 +163,13 @@ export default {
       })
     },
     query () {
-      this.$api("queryAll",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{//查询当前页帖子函数
+      this.$api("queryAll",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
         this.list = res.data.data.list
+        console.log(res)
+        this.modf()//分解当前帖子图片
         this.searchObj.pageSize = res.data.data.pageSize;
         this.searchObj.pageNum = res.data.data.pageNum;
         this.searchObj.totalCount = res.data.data.total;
-        this.modf()
       })
     },
 
@@ -156,7 +179,6 @@ export default {
       // console.log(val)
     },
     handleCurrentChange (val) {
-      // debugger;
       this.searchObj.pageNum = val;
       this.query();
       // console.log(val)

@@ -98,6 +98,7 @@ router.beforeEach((to, from, next) => {
     //         next({ path: 'login' })
     //     }
     // }
+    clearInterval(this.timer)
     next()
 });
 export default router
