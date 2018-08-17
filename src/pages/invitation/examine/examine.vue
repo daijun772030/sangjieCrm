@@ -165,7 +165,7 @@ export default {
     query () {
       this.$api("queryAll",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
         this.list = res.data.data.list
-        console.log(res)
+        // console.log(res)
         this.modf()//分解当前帖子图片
         this.searchObj.pageSize = res.data.data.pageSize;
         this.searchObj.pageNum = res.data.data.pageNum;

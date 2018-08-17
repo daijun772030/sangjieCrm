@@ -18,6 +18,24 @@ const Invitation = () =>
     import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
 const Examine = () =>
     import ('@/pages/invitation/examine/examine' /* webpackChunkName: "pages/invitation/examine/examine" */ )
+const Accomplish = () =>
+    import ('@/pages/Material/accomplish' /* webpackChunkName: "pages/Material/accomplish" */ )
+const Activity = () =>
+    import ('@/pages/Material/activity' /* webpackChunkName: "pages/Material/activity" */ )
+const Deliver = () =>
+    import ('@/pages/Material/deliver' /* webpackChunkName: "pages/Material/deliver" */ )
+const Refunded = () =>
+    import ('@/pages/Material/refunded' /* webpackChunkName: "pages/Material/refunded" */ )
+const Take = () =>
+    import ('@/pages/Material/take' /* webpackChunkName: "pages/Material/take" */ )
+const Upshop = () =>
+    import ('@/pages/Material/upshop' /* webpackChunkName: "pages/Material/upshop" */ )
+const Financial = () =>
+    import ('@/pages/shopOrder/financial' /* webpackChunkName: "pages/shopOrder/financial" */ )
+const OrderSystem = () =>
+    import ('@/pages/shopOrder/orderSystem' /* webpackChunkName: "pages/shopOrder/orderSystem" */ )
+const RefundOrder = () =>
+    import ('@/pages/refund/refundOrder' /* webpackChunkName: "pages/refund/refundOrder" */ )
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -75,7 +93,19 @@ const router = new Router({
                         children: [
                             { name: 'invitation-examine', path: 'examine', component: Examine }
                         ]
-                    }
+                    },
+                    { name: 'material', path: 'material', component: Take },
+                    { name: 'material-take', path: 'material', component: Take },
+                    { name: 'material-accomplish', path: 'accomplish', component: Accomplish },
+                    { name: 'material-activity', path: 'activity', component: Activity },
+                    { name: 'material-deliver', path: 'deliver', component: Deliver },
+                    { name: 'material-refunded', path: 'refunded', component: Refunded },
+                    { name: 'material-upshop', path: 'upshop', component: Upshop },
+                    { name: 'shopOrder', path: 'shopOrder', component: OrderSystem },
+                    { name: 'shopOrder-orderSystem', path: 'orderSystem', component: OrderSystem },
+                    { name: 'shopOrder-financial', path: 'financial', component: Financial },
+                    { name: 'refund', path: 'refund', component: RefundOrder },
+                    { name: 'refund-refundOrder', path: 'RefundOrder', component: RefundOrder }
                 ]
             }
         ]
