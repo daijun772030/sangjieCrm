@@ -130,7 +130,7 @@ export default {
       }
     },
     modf() {//分解图片得函数
-       for(var i=0;i<this.list.length;i++) {
+       for(let i=0;i<this.list.length;i++) {
           var a  = this.list[i].img.split(',')
           this.list[i].img = a;
         }
