@@ -6,8 +6,8 @@ import Router from 'vue-router';
 import App from '@/App';
 const Manager = () =>
     import ('@/pages/manager' /* webpackChunkName: "pages/manager" */ ).then(m => m.default || m)
-    // const Login = () =>
-    //     import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
+const Login = () =>
+    import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
 const Fanance = () =>
     import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance/finance" */ ).then(m => m.default || m)
 const Aptitude = () =>
@@ -72,7 +72,7 @@ const router = new Router({
         path: '/',
         component: App,
         children: [
-            // { name: 'login', path: 'login', component: Login },
+            { name: 'login', path: 'login', component: Login },
             {
                 name: 'manager',
                 path: 'manager',
