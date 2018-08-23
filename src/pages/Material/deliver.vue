@@ -1,66 +1,54 @@
 <template>
-  <div class="deliver">
-    <el-form :inline="true" :model="seachObject" label-width="5px" size="mini"  class="searchForm">
-      <el-form-item class="float_left">
-          <el-input v-model="seachObject.input" placeholder="搜索" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
-      </el-form-item>
-      <el-form-item class="float_left">
-          <el-date-picker v-model="seachObject.starDate" type="date" clearable placeholder="起始日期"  class="wd"></el-date-picker>
-      </el-form-item>
-      <el-form-item class="float_left">
-          <el-date-picker v-model="seachObject.endDate" type="date" clearable placeholder="结束日期"  class="wd"></el-date-picker>
-      </el-form-item>
-      <el-form-item class="float_left">
-          <el-select v-model="seachObject.money" placeholder="金额区间" clearable>
-              <!-- <el-option >
-              </el-option> -->
-          </el-select>
-      </el-form-item >
-      <el-form-item class="float_left">
-          <el-select v-model="seachObject.state" placeholder="状态" clearable>
-              <!-- <el-option >
-              </el-option> -->
-          </el-select>
-      </el-form-item>
-      <el-form-item class="float_left">
-          <el-button @click="earchForm" type="primary">确定</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="take">
     <el-table
-      :data="list"
-      empty-text="没有新东西"
-      v-loading="loading" 
-      :default-sort = "{prop: 'condition', order: 'descending'}"
-      element-loading-text="加载中..."
-      style="
-      height: calc(100% -60px)"
-      class="home-table">
-        <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
-        <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
-        <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
-        <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
-        <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
-        <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
-        <el-table-column prop="status" align="center" label="支付状况">
-            <template slot-scope="scope"> 
-            <span v-if="scope.row.status==0">未支付</span>
-            <span v-if="scope.row.status==1">支付失败</span>
-            <span v-if="scope.row.status==2">支付成功</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
-        <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
-        <el-table-column
-          align="center"
-          width="200px"
-          label="操作">
-        <template slot-scope="scope" width="80%">
-            <el-button
-            size="mini"
-            @click="handleEdit(scope)">发货</el-button>
-        </template>
-        </el-table-column>
-      </el-table>
+            :data="list"
+            empty-text="没有新东西"
+            v-loading="loading" 
+            :default-sort = "{prop: 'condition', order: 'descending'}"
+            element-loading-text="加载中..."
+            style="
+            height: calc(100% -105px)"
+            class="take-table">
+            <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
+            <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
+            <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
+            <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
+            <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
+            <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
+            <el-table-column prop="status" align="center" label="支付状况">
+                <template slot-scope="scope"> 
+                <span v-if="scope.row.status==0">未支付</span>
+                <span v-if="scope.row.status==1">支付失败</span>
+                <span v-if="scope.row.status==2">支付成功</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="actualMoney" align="center" label="应付金额"></el-table-column>
+            <el-table-column  align="center" label="平台打折"></el-table-column>
+            <el-table-column prop="discountMoney" align="center" label="平台满减"></el-table-column>
+            <el-table-column prop="account" align="center" label="实付金额"></el-table-column>
+            <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
+            <el-table-column
+             align="center"
+             width="200px"
+             label="操作">
+            <template slot-scope="scope" width="80%">
+                <el-button
+                size="mini"
+                @click="handleEdit(scope)">发货</el-button>
+            </template>
+            </el-table-column>
+        </el-table>
+        <div class="pageination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="searchObj.pageNum"
+            :page-sizes="[10, 15, 20, 35]"
+            :page-size="searchObj.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="searchObj.totalCount">
+          </el-pagination>
+        </div>
   </div>
 </template>
 <script>
@@ -77,42 +65,65 @@ export default {
         state: '',
         region: ''
       },
+      searchObj:{
+        pageSize:10,
+        pageNum:1,
+        totalCount:0
+      }
     }
   },
   created () {
-
+    this.orderAll();
   },
   methods: {
-    handleEdit (scope) {//发货操作
-      console.log(scope)
+    orderAll () {
+      this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"1"}}).then((res)=>{
+          // console.log(res)
+          var list = res.data.data.list;
+          this.list = list;
+          this.searchObj.pageSize = res.data.data.pageSize;
+          this.searchObj.pageNum = res.data.data.pageNum;
+          this.searchObj.totalCount = res.data.data.total;
+
+      })
     },
-    earchForm () {//搜索按钮事件
-      console.log("这是搜索按钮")
-    }
+    handleEdit(scope) {//点击接单改变状态
+            // console.log(scope)
+            this.$api("orderType",{params:{type:"2",orderId:scope.row.id,outTradeNo:scope.row.orderNum}}).then((res)=>{
+                // debugger;
+                // console.log(res)
+                var num = scope.$index
+                // console.log(num)
+                this.list[num] = null;
+                this.orderAll();
+            })
+        },
+    earchForm() {//搜索框提交
+      // console.log("这是搜索框")
+    },
+    handleSizeChange (val) {//改变每页显示多少条
+        this.searchObj.pageSize = val;
+        this.orderAll()
+      },
+      handleCurrentChange (val) { //改变前往多少页
+        this.searchObj.pageNum = val;
+        this.orderAll()
+      }
   }
 }
 </script>
 <style lang="less" scoped>
-    .deliver{
-      width: 100%;
-      height:100%;
-      text-align: center;
-      color: black;
-      color: rgba(0, 0, 0, 0.349)
-    }
-    .searchForm{
-        padding: 10px;
-
-    }
-    .searchForm1{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content:center;
-        align-items: center;
-    }
+  .take {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
 </style>
-<style lang="less">
-  
+<style class="less">
+  .take-table {
+    width: 100%;
+    height: calc(100% - 60px)
+  }
 </style>
 
 

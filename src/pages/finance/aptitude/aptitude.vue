@@ -25,6 +25,17 @@
         </template> 
       </el-table-column> 
     </el-table>
+    <div class="pageination">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="searchObj.pageNum"
+        :page-sizes="[10, 15, 20, 35]"
+        :page-size="searchObj.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="searchObj.totalCount">
+      </el-pagination>
+    </div>
     <el-dialog :modal-append-to-body="false" :title="title" :visible.sync="pass.passVisible"  width="300px" @close="close(pass)">
       <el-form :inline="false" :model='pass' ref="pass"  class="searchForm">
         <el-form-item label="不通过原因：" prop="passText">
@@ -48,7 +59,8 @@
   </div>
 </template>
 <script>
-import List from './list.js'
+// import List from './list.js'
+// import list from './list.js';
 export default {
   data () {
     return {
@@ -57,26 +69,47 @@ export default {
         passText:null,
         passVisible:false
       },
-      // idPositive:null,//法人正面照
-      // idSide:null,//法人反面照
-      // license:null,//营业执照
+      searchObj:{
+        pageNum:1,
+        pageSize:10,
+        totalCount:0
+      },
       DelogImage:null,//图片地址
        title:"图片详情",
-      list:List.list,
+      list:null,
        dialogTableVisible:false//对话框
     }
   },
   created () {
-    this.$api("archives",{params:{pageNum:"1",pageSize:"10"}}).then((res)=>{
-      // console.log(res.data.data.list)
-      this.list = res.data.data.list
-
-    })
+    this.getAll()
   },
   methods:{
+    getAll () {
+      this.$api("archives",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
+        var resList = res.data.data.list
+      // this.list = res.data.data.list;
+      for(var i = 0;i<resList.length;i++) {
+        if(resList[i].status==0){
+          this.list.push(resList[i])
+        }
+      }
+      this.searchObj.pageNum = res.data.data.pageNum;
+      this.searchObj.pageSize = res.data.data.pageSize;
+      this.searchObj.totalCount = res.data.data.total;
+
+    })
+    },
+    handleSizeChange (val) {//分页功能
+      this.searchObj.pageSize = val;
+      this.getAll()
+    },
+    handleCurrentChange (val) {//按页数分类
+      this.searchObj.pageNum = val;
+      this.getAll();
+    },
     close(pass){//弹窗消失
-    pass.passText=null;
-    pass.passVisible=false
+      pass.passText=null;
+      pass.passVisible=false
     },
     IdPositive (scope) {
       this.dialogTableVisible = true;
@@ -99,6 +132,7 @@ export default {
             type: "success"
           })
         }
+        this.getAll();
         // console.log('已经通过')
       })
     },
@@ -113,6 +147,7 @@ export default {
         if(res.data.retCode==200){
           this.$message.error("审核未通过")
         }
+        this.getAll();
         // console.log("未通过")
       })
     },

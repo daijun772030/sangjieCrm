@@ -104,7 +104,11 @@ const apis = {
     //删除boss圈对应帖子
     deleteStatus: get("/archives/updateMessageStatus"),
     //搜索boss圈对应的帖子
-    messageAll: get("/archives/findByMessageAll")
+    messageAll: get("/archives/findByMessageAll"),
+    //订单查询
+    orderAll: get("/merchant/order/all"),
+    //修改订单
+    orderType: get("/merchant/order/updateByOrderType"),
 
 }
 const request = function(name, data, config) {

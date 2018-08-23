@@ -68,7 +68,13 @@ import Hashes from 'jshashes'
             console.log(res)
             var message = res.data.message
           if(res.data.retCode==200) {
-              this.$router.replace({ path : this.manager });
+              if(res.data.data.type==2){
+                  this.$router.replace({ path : this.manager });
+                  return
+              }else{
+                  this.$message.error("请输入正确的账号和密码")
+              }
+              
           }else if (res.data.retCode==500102) {
               this.$message.error(message)
           }else if (res.data.retCode==500104) {

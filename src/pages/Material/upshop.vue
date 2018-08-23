@@ -230,7 +230,7 @@
          console.log(obj)
       },
       status () {//查询我们的所有商品的类型
-        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+        this.$api('typeStatus',{params:{status:"3"}}).then((res)=>{
           console.log(res.data.data);
           this.shopType = res.data.data
         })
