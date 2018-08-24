@@ -13,25 +13,32 @@
         <el-form-item class="float_right">
           <el-button type="primary" @click="add">添加商品</el-button>
         </el-form-item>
+        <el-form-item class="float_right">
+          <el-button type="primary" @click="addtype">添加商品类型</el-button>
+        </el-form-item>
       </el-form>
-
       <el-table class="goods-table" height="calc(100% - 105px)" border :data="list1">
+        <el-table-column type="expand">
+           <template slot-scope="props">
+            <el-table id="stand-table" border :data="props.row.standardsModelList">
+              <!-- <el-table-column prop="props.row.name" label="商品名称" align="center" >
+              </el-table-column>
+              <el-table-column prop="props.row.upName" label="商品类型" align="center"></el-table-column> -->
+              <el-table-column prop="name" label="商品规格" align="center" ></el-table-column>
+              <el-table-column prop="price" label="规格价格(元)" align="center"></el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="商品名称" align="center" ></el-table-column>
         <el-table-column prop="upName" label="商品类型" align="center"></el-table-column>
         <el-table-column prop="img" label="商品logo" align="center">
-          <!-- <template slot-scope="scope">
-             <img :src="'/test' + scope.row.img" alt="法人身份证正面"  class="itemImage">
-          </template> -->
         </el-table-column>
-        <el-table-column prop="price" label="商品价格" align="center"></el-table-column>
-        <!-- <el-table-column prop="putawayState" label="是否上架" align="center">
+        <el-table-column prop="price" label="商品价格" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.putawayState === '1'">已上架</span>
-            <span v-else>未上架</span>
+            <span v-if="scope.row.standardsModelList.length>0"></span>
+            <span v-else>{{scope.row.price}}</span>
           </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="upData" label="上传时间" align="center"></el-table-column>
-        <el-table-column prop="endData" label="最后编辑时间" align="center"></el-table-column> -->
+        </el-table-column>
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="edit(scope)">编辑</el-button>
@@ -43,34 +50,52 @@
       </el-table>
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="dialogVisible" :show-close="false" width="900px">
         <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
-          <el-form-item label="商品类型" prop="upName" class="myitem" >
-            <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId'>
+          <el-form-item :label="updateShop.name1" prop="upName" class="myitem" >
+            <el-select v-model="addform.type" clearable :placeholder="updateShop.inputName1" @change="getShop" :disabled='typeId'>
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品名称" prop="name" class="myitem">
-            <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId">
+          <el-form-item :label="updateShop.name2" prop="name" class="myitem">
+            <el-select v-model="addform.id" clearable :placeholder="updateShop.name2" :disabled="typeId">
               <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品价格" prop="price" class="myitem">
-            <el-input type="text" placeholder="请输入大于十五的金额" @blur="input1" v-model="addform.price" >
+          <el-form-item label="商品规格" prop="standName" class="myitem">
+            <el-input
+              placeholder="请输入商品规格如： 300ml"
+              v-model="addform.standName"
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item v-if="addform.standName==null" :label="updateShop.name3" prop="price" class="myitem">
+            <el-input type="text" :placeholder="updateShop.name3" @blur="input1" v-model="addform.price" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
-          <el-form-item label="编辑时间" class="myitem">
-            <el-date-picker
-          :disabled="true"
-            v-model="addform.id"
-            type="date"
-            placeholder="创建时间">
-          </el-date-picker>
+          <el-form-item label="规格价格" prop="standPrice" class="myitem" v-if="addform.standName !=null">
+            <el-input type="text" placeholder="填写该规格商品价格" @blur="input1" v-model="addform.standPrice" >
+              <template slot="append">元</template>
+            </el-input> 
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="close(addform)">取消</el-button>
           <el-button type="primary" @click="save">保存</el-button>
         </span>
+      </el-dialog>
+      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="myDisable" :show-close="false" width="900px">
+        <el-form :inline="false" :model="imgType" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
+          <el-form-item label="规格价格" prop="standPrice" class="myitem" v-if="imgType.name !=null">
+            <el-input type="text" placeholder="产品名称" @blur="input1" v-model="imgType.name" ></el-input> 
+          </el-form-item>
+          <el-form-item label="上传产品图片">
+            <!-- <el-upload :action="qiniuAction" :data="tokenData" :show-file-list="false" :on-success="handleLogoSuccess2" :before-upload="beforeLogoUpload">
+              <img v-if="addForm.headImageUrl" :src="addForm.headImageUrl" class="logoImage">
+              <i v-else class="uploadImage"></i>
+              <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
+            </el-upload> -->
+          </el-form-item>
+        </el-form>  
       </el-dialog>
       <!-- 这里是分页功能 -->
       <div class="pageination">
@@ -92,6 +117,22 @@
   export default {
     data () {
       return {
+        imgType:{
+          name:null,
+          img:null
+        },
+        myDisable:false,
+        updateShop:{
+          name1:"商品类型",
+          name2:"商品名称",
+          name3:"商品价格",
+          name4:"编辑时间",
+          inputName1:'请选择商品类型',
+          inputName2:"请选择商品名称",
+          inputName3:"输入商品价格（大于十五的商品金额）",
+          inputName4:"编辑时间"
+        },
+        arr:[],//这是耗材规格的数组
         typeId:false,
         disable:false,//是否禁用select框
         dialogVisible: false,
@@ -121,6 +162,8 @@
           type:null,
           upName:null,
           price:null,
+          standPrice:null,
+          standName:null
         },
         shopType:[],//商品类型
         classShop:[],//根据商品类型获得相应的商品
@@ -137,6 +180,14 @@
       // this.clasShop();
     },
     methods: {
+      addtype() {
+        this.myDisable = true;
+        this.actionType = 3;
+        this.disable = false;
+        this.title = "添加商品类型"
+        
+      },
+
       input1 () {//输入的金额判断
       var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
       if(reg.test(this.addform.price)){
@@ -190,18 +241,25 @@
         this.dialogVisible = false
        console.log(this.addform)
         if(this.actionType==1){
+          debugger;
           this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
-            console.log(res)
+            this.$api('addStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.price}).then((res)=>{
+              console.log(res);
             if(res.data.retCode!==200) {
-              this.$message('添加失败')
+            this.$message('添加失败')
             }else{
               this.$message('添加成功')
             }
+            })
+            console.log(res)
           })
           this.ces()
         }
         if(this.actionType==2) {
           this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
+            this.$api('updateByStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.price}).then((res)=>{
+              console.log(res);
+            })
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('修改失败')
@@ -271,6 +329,10 @@
           this.searchObj.pageSize = res.data.data.pageSize;
           this.searchObj.totalCount = res.data.data.total;
           this.list1 = list;
+           for(var i=0;i<this.list1.length;i++) {
+            this.arr.push(this.list1[i].standardsModelList)
+            console.log(this.arr)
+          }
         })
       },
       handleSizeChange (val) {   //点击每页多少条的时候触发的函数(end)
@@ -300,7 +362,7 @@
         this.dialogVisible = true;
         this.actionType=2;
         this.addform = myCode.row;
-        console.log(myCode.row)
+        console.log(myCode)
         this.title = '编辑商品';
         
       },
@@ -320,9 +382,19 @@
         color: black;
         color: rgba(0, 0, 0, 0.349)
     }
-    .searchForm{
-        padding: 10px;
-    }
-  
+  .searchForm{
+      padding: 10px;
+  }
+  .form{
+   
+    padding: 10px 0;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+ 
+ 
 </style>
 

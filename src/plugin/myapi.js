@@ -86,6 +86,10 @@ const apis = {
     addshop: post('/commodity/addCommodity'), //添加商品
     delshop: post('/commodity/deleteByCommodityid'), //删除商品
     upshop: post('/commodity/updateByCommodityid'), //修改商品
+    // 耗材添加商品规格
+    addStandards: post('/type/addStandards'),
+    //耗材修改商品规格
+    updateByStandards: post('/type/updateByStandards'),
     //商品类型
     typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
     typeStatus: get('/type/findByTypeStatus'), //查询一级下单栏

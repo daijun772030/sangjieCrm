@@ -38,7 +38,7 @@
         <img :src="'/test' + DelogImage" alt="">
       </div>
     </el-dialog>
-    <!-- <div class="pageination">
+    <div class="pageination">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -48,7 +48,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="searchObj.totalCount">
       </el-pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
