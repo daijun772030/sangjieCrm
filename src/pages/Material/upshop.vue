@@ -21,11 +21,13 @@
         <el-table-column type="expand">
            <template slot-scope="props">
             <el-table id="stand-table" border :data="props.row.standardsModelList">
-              <!-- <el-table-column prop="props.row.name" label="商品名称" align="center" >
-              </el-table-column>
-              <el-table-column prop="props.row.upName" label="商品类型" align="center"></el-table-column> -->
               <el-table-column prop="name" label="商品规格" align="center" ></el-table-column>
               <el-table-column prop="price" label="规格价格(元)" align="center"></el-table-column>
+              <el-table-column label="操作" align="center" width="200">
+              <template slot-scope="scope">
+                <el-button @click="deleShop(scope.row)" type="text" size="mini">删除</el-button>
+              </template>  
+            </el-table-column>
             </el-table>
           </template>
         </el-table-column>
@@ -42,9 +44,9 @@
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="edit(scope)">编辑</el-button>
-            <el-button @click="deleShop(scope.row)" type="text" size="mini">删除</el-button>
+            <!-- <el-button @click="deleStand(scope.row)" type="text" size="mini">删除</el-button>
             <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
-            <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button>
+            <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button> -->
           </template>  
         </el-table-column>
       </el-table>
@@ -60,12 +62,17 @@
               <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品规格" prop="standName" class="myitem">
+          <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==1">
             <el-input
               placeholder="请输入商品规格如： 300ml"
               v-model="addform.standName"
               clearable>
             </el-input>
+          </el-form-item>
+          <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==2">
+              <el-select v-model="addform.standName" @change = "num" clearable placeholder="选择商品规格">
+                <el-option v-for="item in addform.standardsModelList" :key="item.id" :label="item.name" :value="item.name" :disabled="item.type"></el-option>
+              </el-select>
           </el-form-item>
           <el-form-item v-if="addform.standName==null" :label="updateShop.name3" prop="price" class="myitem">
             <el-input type="text" :placeholder="updateShop.name3" @blur="input1" v-model="addform.price" >
@@ -73,7 +80,7 @@
             </el-input> 
           </el-form-item>
           <el-form-item label="规格价格" prop="standPrice" class="myitem" v-if="addform.standName !=null">
-            <el-input type="text" placeholder="填写该规格商品价格" @blur="input1" v-model="addform.standPrice" >
+            <el-input type="text" placeholder="填写该规格商品价格"  v-model="addform.standPrice" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
@@ -84,18 +91,34 @@
         </span>
       </el-dialog>
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="myDisable" :show-close="false" width="900px">
-        <el-form :inline="false" :model="imgType" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
-          <el-form-item label="规格价格" prop="standPrice" class="myitem" v-if="imgType.name !=null">
-            <el-input type="text" placeholder="产品名称" @blur="input1" v-model="imgType.name" ></el-input> 
+        <el-form :inline="true" :model="tableData" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
+          <el-form-item label="产品类型：" prop="higherup" class="myitem">
+            <el-select v-model="tableData.higherup" clearable placeholder="请选择产品的类型" @change="getShop" :disabled='typeId'>
+              <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select> 
           </el-form-item>
-          <el-form-item label="上传产品图片">
-            <!-- <el-upload :action="qiniuAction" :data="tokenData" :show-file-list="false" :on-success="handleLogoSuccess2" :before-upload="beforeLogoUpload">
-              <img v-if="addForm.headImageUrl" :src="addForm.headImageUrl" class="logoImage">
-              <i v-else class="uploadImage"></i>
+          <el-form-item label="产品名称：" prop="name" class="myitem">
+            <el-input type="text" placeholder="输入产品名称" v-model="tableData.name" ></el-input> 
+          </el-form-item>
+          <el-form-item label="上传产品图片：">
+            <el-upload
+              name="img"
+              :data="tableData"
+              class="avatar-uploader"
+              action="/api/type/addByType"
+              :show-file-list="true"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i><br>
               <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
-            </el-upload> -->
+            </el-upload>
           </el-form-item>
-        </el-form>  
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="ImgClose(tableData)">取消</el-button>
+          <el-button type="primary" @click="ImgSave(tableData)">保存</el-button>
+        </span>
       </el-dialog>
       <!-- 这里是分页功能 -->
       <div class="pageination">
@@ -116,10 +139,16 @@
   // import GoodsObj from './goods1.js'
   export default {
     data () {
-      return {
+      return {     
+        imageUrl:null,//上传图片img的地址
         imgType:{
           name:null,
           img:null
+        },
+        tableData:{
+          name:null,
+          higherup:null,
+          status:"4"
         },
         myDisable:false,
         updateShop:{
@@ -160,10 +189,12 @@
           name:null,
           number:null,
           type:null,
+          standType:null,
           upName:null,
           price:null,
           standPrice:null,
-          standName:null
+          standName:null,
+          standardsModelList:null
         },
         shopType:[],//商品类型
         classShop:[],//根据商品类型获得相应的商品
@@ -175,36 +206,97 @@
     created () {
       // this.allshop()
       // this.addshop();
+      // this.get()
       this.ces();
       this.status();
       // this.clasShop();
     },
     methods: {
-      addtype() {
+      handleAvatarSuccess(res, file) {//图片上传函数
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {//图片上传函数
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      }, 
+      ImgClose (tableData) {//添加商品类型的函数
+        this.myDisable = false;
+        // console.log(tableData)
+        for(var i = 0;i<tableData.length;i++) {
+          tableData[i].name = null;
+          tableData[i].higherup = null;
+        }
+      },
+      addtype() {//添加商品的按钮
         this.myDisable = true;
         this.actionType = 3;
         this.disable = false;
         this.title = "添加商品类型"
         
       },
-
+      num() {//当下拉结束后找值
+      // debugger;
+        console.log(this.addform.standName)
+        var arr = this.addform.standardsModelList;
+        for (var i=0;i<arr.length;i++) {
+          if(arr[i].name == this.addform.standName) {
+            this.addform.standPrice = arr[i].price;
+            this.addform.standType = arr[i].id;
+          }
+        }
+      },
       input1 () {//输入的金额判断
-      var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
-      if(reg.test(this.addform.price)){
-         this.addform.pice = reg.test(this.addform.price);
-      }else if (/[^\d]/.test(this.addform.price)) {
-        this.addform.price=this.addform.price.replace(/[^\d]/g,'')
-      }
-      else{
-        this.$message("请正确输入大于十五的金额");
-        this.addform.price = null;
-      }
+        var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
+        if(reg.test(this.addform.price)){
+          this.addform.pice = reg.test(this.addform.price);
+        }else if (/[^\d]/.test(this.addform.price)) {
+          this.addform.price=this.addform.price.replace(/[^\d]/g,'')
+        }
+        else{
+          this.$message("请正确输入大于十五的金额");
+          this.addform.price = null;
+        }
       },
       stop() {
         this.dis = true;
       },
       getShop(){//这里是点击商品类型获取相应商品
         this.clasShop()
+      },
+      deleStand(scope) {
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+          }).then(() => {
+            this.$api("deleteStand",{id:scope.id}).then((res)=>{
+              if(res.data.retCode==200){
+                this.ces()
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+              }else {
+                this.$message({
+                  type: 'success',
+                  message: '删除失败!'
+                });
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+          });
       },
       deleShop(scope) {//删除商品相当于下架订单
         console.log(scope);
@@ -237,27 +329,45 @@
 
         // })
       },
+      get() {
+        this.$api('addStandards',{commodityid:"38",name:"300ml",price:"99"}).then((res)=>{
+          console.log(res);
+        })
+      },
        save () {//保存
         this.dialogVisible = false
-       console.log(this.addform)
         if(this.actionType==1){
-          debugger;
-          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
-            this.$api('addStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.price}).then((res)=>{
-              console.log(res);
-            if(res.data.retCode!==200) {
-            this.$message('添加失败')
+           console.log(this.addform)
+          // debugger;
+          if(this.addform.standName) {
+            debugger;
+          this.$api('addStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.standPrice}).then((res)=>{
+              if(res.data.retCode!==200) {
+            this.$message(res.data.message)
             }else{
-              this.$message('添加成功')
+              this.$message(res.data.message)
             }
+              console.log(res);
             })
+            this.ces()
+          }else{
+            this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
+            if(res.data.retCode!==200) {
+            this.$message(res.data.message)
+            }else{
+              this.$message(res.data.message)
+            }
             console.log(res)
           })
           this.ces()
+          }
+          
         }
         if(this.actionType==2) {
+          // console.log(this.addform)
+          // debugger;
           this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
-            this.$api('updateByStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.price}).then((res)=>{
+            this.$api('updateByStandards',{id:this.addform.standType,name:this.addform.standName,price:this.addform.standPrice}).then((res)=>{
               console.log(res);
             })
             console.log(res)
@@ -299,9 +409,10 @@
           console.log(res);
           this.classShop = res.data.data;
           for(var i=0;i<this.classShop.length;i++) {
+            console.log(this.classShop)
             if(this.classShop[i].type) {
               // console.log(this.classShop[i].type)
-              this.classShop[i].type = true;
+              this.classShop[i].type = false;
               console.log(this.dis)
             }else{
               this.classShop[i].type = false;
@@ -330,7 +441,7 @@
           this.searchObj.totalCount = res.data.data.total;
           this.list1 = list;
            for(var i=0;i<this.list1.length;i++) {
-            this.arr.push(this.list1[i].standardsModelList)
+            this.arr=this.list1[i].standardsModelList
             console.log(this.arr)
           }
         })
@@ -344,24 +455,30 @@
         this.searchObj.pageNum = val;
         this.ces();
       },
-      upshop () { //修改商品
-        this.$api('upshop',{id:'2',price:'34'}).then((res)=>{
-          console.log(res)
-        })
-      },
+      // upshop () { //修改商品
+      //   this.$api('upshop',{id:'2',price:'34'}).then((res)=>{
+      //     console.log(res)
+      //   })
+      // },
       add () {       //添加商品函数
-      this.actionType =1;
-      this.disable = false
+        this.actionType =1;
+        this.disable = false
         this.title = "添加商品"
         this.dialogVisible = true
       },
       edit (myCode) {
         // debugger;        //编辑商品
         this.typeId =true;
-        console.log(myCode.row)
+        // console.log(myCode.row)
         this.dialogVisible = true;
         this.actionType=2;
-        this.addform = myCode.row;
+        var row =  myCode.row;
+        this.addform.name = row.name;
+        this.addform.upName = row.upName;
+        this.addform.id = row.id;
+        this.addform.price = row.price;
+        this.addform.standardsModelList  = row.standardsModelList;
+
         console.log(myCode)
         this.title = '编辑商品';
         
@@ -394,7 +511,29 @@
     justify-content: space-around;
     align-items: center;
   }
- 
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
  
 </style>
 

@@ -90,6 +90,10 @@ const apis = {
     addStandards: post('/type/addStandards'),
     //耗材修改商品规格
     updateByStandards: post('/type/updateByStandards'),
+    //耗材删除商品规格
+    deleteStand: post('/type/deleteByStandards'),
+    //添加产品的类型
+    addByType: get("/type/addByType"),
     //商品类型
     typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
     typeStatus: get('/type/findByTypeStatus'), //查询一级下单栏
