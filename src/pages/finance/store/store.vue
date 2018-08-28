@@ -73,20 +73,32 @@ export default {
     }
   },
   created () {
-    this.$api("archives",{params:{pageNum:"1",pageSize:"10"}}).then((res)=>{//查询所有资质
-      // console.log(res.data.data.list)
-      this.list = res.data.data.list
-    });
-    this.$api("network",{phone:"13666288963",type:"2"}).then((res)=>{
-      console.log(res)
-    })
+    this.getAll();
+    // this.$api("network",{phone:"13666288963",type:"2"}).then((res)=>{
+    //   console.log(res)
+    // })
   },
   methods: {
-    cs () {
-      this.$api("network",{phone:"13666288963",type:"2"}).then((res)=>{
-        console.log(res)
-      })
+    getAll () {
+      this.$api("archives",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSzie}}).then((res)=>{//查询列表的函数
+        var resList = res.data.data.list
+      // this.list = res.data.data.list;
+      for(var i = 0;i<resList.length;i++) {
+        if(resList[i].status==0){
+          this.list.push(resList[i])
+        }
+      }
+      this.searchObj.pageNum = res.data.data.pageNum;
+      this.searchObj.pageSize = res.data.data.pageSize;
+      this.searchObj.totalCount = res.data.data.total;
+
+    })
     },
+    // cs () {
+    //   this.$api("network",{phone:"13666288963",type:"2"}).then((res)=>{
+    //     console.log(res)
+    //   })
+    // },
     close(pass){//弹窗消失
     pass.passText=null;
     pass.passVisible=false

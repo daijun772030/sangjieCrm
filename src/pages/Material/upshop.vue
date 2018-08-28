@@ -41,9 +41,10 @@
             <span v-else>{{scope.row.price}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="200">
+        <el-table-column label="操作" align="center" width="300">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="edit(scope)">编辑</el-button>
+             <el-button @click="upStand(scope.row)" type="text" size="mini">添加规格</el-button>
             <!-- <el-button @click="deleStand(scope.row)" type="text" size="mini">删除</el-button>
             <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
             <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button> -->
@@ -53,7 +54,7 @@
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="dialogVisible" :show-close="false" width="900px">
         <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
           <el-form-item :label="updateShop.name1" prop="upName" class="myitem" >
-            <el-select v-model="addform.type" clearable :placeholder="updateShop.inputName1" @change="getShop" :disabled='typeId'>
+            <el-select v-model="addform.upName" clearable :placeholder="updateShop.inputName1" @change="getShop" :disabled='typeId'>
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -80,6 +81,42 @@
             </el-input> 
           </el-form-item>
           <el-form-item label="规格价格" prop="standPrice" class="myitem" v-if="addform.standName !=null">
+            <el-input type="text" placeholder="填写该规格商品价格"  v-model="addform.standPrice" >
+              <template slot="append">元</template>
+            </el-input> 
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="close(addform)">取消</el-button>
+          <el-button type="primary" @click="save">保存</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="standDisc" :show-close="false" width="900px">
+        <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
+          <el-form-item label="商品类型" prop="upName" class="myitem" >
+            <el-input
+              placeholder="商品类型"
+              v-model="addform.upName"
+              :disabled='typeId'
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="商品名称" prop="name" class="myitem">
+            <el-input
+              placeholder="商品名称"
+              v-model="addform.name"
+              :disabled='typeId'
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="商品规格" prop="standName" class="myitem">
+            <el-input
+              placeholder="请输入商品规格如： 300ml"
+              v-model="addform.standName"
+              clearable>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="规格价格" prop="standPrice" class="myitem">
             <el-input type="text" placeholder="填写该规格商品价格"  v-model="addform.standPrice" >
               <template slot="append">元</template>
             </el-input> 
@@ -139,7 +176,8 @@
   // import GoodsObj from './goods1.js'
   export default {
     data () {
-      return {     
+      return {
+        standDisc:false,//添加规格弹框状态     
         imageUrl:null,//上传图片img的地址
         imgType:{
           name:null,
@@ -152,10 +190,10 @@
         },
         myDisable:false,
         updateShop:{
-          name1:"商品类型",
-          name2:"商品名称",
-          name3:"商品价格",
-          name4:"编辑时间",
+          name1:"商品类型：",
+          name2:"商品名称：",
+          name3:"商品无规格价格：",
+          name4:"编辑时间：",
           inputName1:'请选择商品类型',
           inputName2:"请选择商品名称",
           inputName3:"输入商品价格（大于十五的商品金额）",
@@ -305,7 +343,7 @@
           cancelButtonText: '取消',
           type: 'warning'
           }).then(() => {
-            this.$api("delshop",{id:scope.id}).then((res)=>{
+            this.$api("deleteStand",{id:scope.id}).then((res)=>{
               if(res.data.retCode==200){
                 this.ces()
                 this.$message({
@@ -329,28 +367,16 @@
 
         // })
       },
-      get() {
-        this.$api('addStandards',{commodityid:"38",name:"300ml",price:"99"}).then((res)=>{
-          console.log(res);
-        })
-      },
+      // get() {
+      //   this.$api('addStandards',{commodityid:"38",name:"300ml",price:"99"}).then((res)=>{
+      //     console.log(res);
+      //   })
+      // },
        save () {//保存
         this.dialogVisible = false
         if(this.actionType==1){
            console.log(this.addform)
           // debugger;
-          if(this.addform.standName) {
-            debugger;
-          this.$api('addStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.standPrice}).then((res)=>{
-              if(res.data.retCode!==200) {
-            this.$message(res.data.message)
-            }else{
-              this.$message(res.data.message)
-            }
-              console.log(res);
-            })
-            this.ces()
-          }else{
             this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
             if(res.data.retCode!==200) {
             this.$message(res.data.message)
@@ -360,16 +386,19 @@
             console.log(res)
           })
           this.ces()
-          }
-          
-        }
-        if(this.actionType==2) {
+          }else if(this.actionType==2) {
           // console.log(this.addform)
           // debugger;
-          this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
+          if(this.addform.standName) {
             this.$api('updateByStandards',{id:this.addform.standType,name:this.addform.standName,price:this.addform.standPrice}).then((res)=>{
-              console.log(res);
+              if(res.data.retCode!==200) {
+              this.$message('修改失败')
+            }else{
+              this.$message('修改成功')
+            }
             })
+          }else{
+            this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('修改失败')
@@ -377,13 +406,24 @@
               this.$message('修改成功')
             }
           })
+          }
           this.ces()
-        }
+        }else if(this.actionType == 4) {
+             this.$api('addStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.standPrice}).then((res)=>{
+              if(res.data.retCode!==200) {
+              this.$message('添加规格失败')
+            }else{
+              this.$message('添加规格成功')
+            }
+            })
+            this.ces()
+        } 
       },
       close (addform) {//取消的时候数据消失
         this.ces()
         this.dialogVisible = false;
         this.typeId =false;
+        this.standDisc = false;
         for(var i in addform) {
           addform[i] = null;
         }
@@ -466,6 +506,16 @@
         this.title = "添加商品"
         this.dialogVisible = true
       },
+      upStand(scope) {//添加商品规格
+        this.title = "添加产品规格",
+        this.typeId = true;
+        this.standDisc = true;
+        this.actionType = 4;
+        this.addform.name = scope.name;
+        this.addform.upName = scope.upName;
+        this.addform.id = scope.id;
+      },
+
       edit (myCode) {
         // debugger;        //编辑商品
         this.typeId =true;

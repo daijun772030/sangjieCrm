@@ -59,7 +59,7 @@
         :total="searchObj.totalCount">
       </el-pagination>
     </div>
-    <audio src="../../../../static/audio/newgoods.mp3" loop='false' id="music" hidden></audio>
+    <audio src="../../../../static/audio/newgoods.mp3"  id="music" hidden></audio>
   </div>
 </template>
 <script>
@@ -85,21 +85,26 @@ export default {
       searchObj:{
         pageSize:10,
         pageNum:1,
-        totalCount:0
+        totalCount:0,
       },
+      newTotalCount:null
     }
   },
   created () {
     this.query();
     this.timer = setInterval(()=>{
-      // debugger;
-      this.intav();
-    },10000000)
+       this.query();
+    },60000);
   },
-  // mounted () {
-  //   this.intav();
-  //   setInterval(this.intav,15000)
-  // },
+  
+  beforeUpdate () {
+    this.$watch("newTotalCount",function(val) {
+      this.$nextTick(function(){
+        var audio = document.getElementById('music');
+        audio.play();
+      })
+    })
+  },
   methods: {
     intav() {  //这里做列表的轮询。。查看是不是有新订单
       var audio = document.getElementById('music');
@@ -170,6 +175,8 @@ export default {
         this.searchObj.pageSize = res.data.data.pageSize;
         this.searchObj.pageNum = res.data.data.pageNum;
         this.searchObj.totalCount = res.data.data.total;
+        this.newTotalCount = res.data.data.total;
+        console.log(this.searchObj.totalCount);
       })
     },
 
