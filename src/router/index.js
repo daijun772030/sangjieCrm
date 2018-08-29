@@ -119,20 +119,9 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
+    console.log(to);
+    console.log(from);
     // debugger;
-    // console.log(from)
-    // console.log(to)
-    // if (from.path === !"/login") {
-    //     next("/")
-    // }
-    // debugger;
-    // if (from.path == "/manager") {
-    //     next({ path: '/manager/upshop' })
-    // }
-    // if (to.path === '/manager/') {
-    //     next()
-    // }
-
     clearInterval(this.timer)
     next()
 });

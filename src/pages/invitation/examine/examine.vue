@@ -31,7 +31,7 @@
       <el-table-column prop="messageText" label="帖子文字内容" align="center" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="img" label="帖子图片内容" align="center">
         <template slot-scope="scope">
-          <img v-bind:src="'/test' + item" alt="帖子图片详情" class="itemImage" v-for="(item,index) in scope.row.img" :key="index" @click="image(scope)">
+          <img :src="'/test' + item" alt="帖子图片详情" class="itemImage" v-for="(item,index) in scope.row.img" :key="index" @click="image(scope)">
         </template>
       </el-table-column>
       <el-table-column prop="volume" label="浏览量" align="center"></el-table-column>
@@ -45,7 +45,7 @@
     </el-table>
     <el-dialog :modal-append-to-body="false" :title="title" :visible.sync="dialogTableVisible"  width="900px">
       <div class="imge">
-        <img :src="'/test' + item" alt="" v-for="(item,index) in img" :key="index">
+        <img :src="'/test' + img" alt="" >
       </div>
     </el-dialog>
     <div class="pageination">
@@ -92,9 +92,9 @@ export default {
   },
   created () {
     this.query();
-    this.timer = setInterval(()=>{
-       this.query();
-    },60000);
+    // this.timer = setInterval(()=>{
+    //    this.query();
+    // },6000);
   },
   
   beforeUpdate () {
@@ -106,39 +106,20 @@ export default {
     })
   },
   methods: {
-    intav() {  //这里做列表的轮询。。查看是不是有新订单
-      var audio = document.getElementById('music');
-      // var start = 0;
-      // var timers = 2
-      this.query()
-      this.arrObj.push(this.searchObj.totalCount)
-      var a = this.arrObj;
-      if(a.length>=3){
-        a.shift();
-      console.log(a)
-      this.arrObj = a;
-      }
-      if(this.arrObj.length==2) {
-        console.log(this.autoplay)
-        // this.autoplay = "";
-        console.log(this.autoplay)
-        var length = this.arrObj.length
-        if(this.arrObj[length-1] - this.arrObj[length-2]==0) {
-          // debugger
-          // this.autoplay = "autoplay"
-          console.log("不提示")
-            //  audio.pause();
-        }else{
-          console.log('提示');
-          audio.play();
-        }
-      }
-    },
     modf() {//分解图片得函数
-       for(let i=0;i<this.list.length;i++) {
-          var a  = this.list[i].img.split(',')
-          this.list[i].img = a;
+      for(let i=0;i<this.list.length;i++) {
+        // debugger;
+        // console.log(this.list[i].img)
+        var img1  = this.list[i].img
+        console.log(img1)
+        if(img1) {
+          // debugger;
+          var img2 = img1.split(',')
+
+          this.list[i].img = img2;
         }
+        
+      }
     },
     formChange() {//搜索函数
       console.log(this.formObj)
@@ -148,7 +129,9 @@ export default {
       })
     },
     image(scope) {//图片查看详情
+    console.log(scope)
       this.img = scope.row.img;
+      console.log(this.img)
       this.dialogTableVisible = true;
     },
     messText(scope) {//查看帖子详情
@@ -169,8 +152,8 @@ export default {
     },
     query () {
       this.$api("queryAll",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
+        // debugger;
         this.list = res.data.data.list
-        // console.log(res)
         this.modf()//分解当前帖子图片
         this.searchObj.pageSize = res.data.data.pageSize;
         this.searchObj.pageNum = res.data.data.pageNum;

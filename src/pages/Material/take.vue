@@ -11,11 +11,11 @@
       class="take-table">
       <el-table-column width="200px" prop="orderNum" align="center" label="订单号"></el-table-column>
       <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
-      <el-table-column prop="shName"  align="center" label="客户姓名"></el-table-column>
-      <el-table-column width="200px" prop="address" align="center" label="客户地址"></el-table-column>
-      <el-table-column width="150px" prop="shPhone" align="center" label="客户电话"></el-table-column>
-      <el-table-column width="150px" prop="startTime" align="center" label="取件时间"></el-table-column>
-      <el-table-column width="150px" prop="endTime" align="center" label="送件时间"></el-table-column>
+      <el-table-column prop="shName"  align="center" label="姓名"></el-table-column>
+      <el-table-column width="200px" prop="address" align="center" label="送货地址"></el-table-column>
+      <el-table-column width="150px" prop="shPhone" align="center" label="联系电话"></el-table-column>
+      <!-- <el-table-column width="150px" prop="startTime" align="center" label="取件时间"></el-table-column>
+      <el-table-column width="150px" prop="endTime" align="center" label="送件时间"></el-table-column> -->
       <el-table-column prop="status" align="center" label="支付状况">
           <template slot-scope="scope"> 
           <span v-if="scope.row.status==0">未支付</span>

@@ -35,7 +35,7 @@
         <el-table-column prop="upName" label="商品类型" align="center"></el-table-column>
         <el-table-column prop="img" label="商品logo" align="center">
         </el-table-column>
-        <el-table-column prop="price" label="商品价格" align="center">
+        <el-table-column prop="price" label="商品默认价格" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.standardsModelList.length>0"></span>
             <span v-else>{{scope.row.price}}</span>
@@ -53,23 +53,23 @@
       </el-table>
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="dialogVisible" :show-close="false" width="900px">
         <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
-          <el-form-item :label="updateShop.name1" prop="upName" class="myitem" >
-            <el-select v-model="addform.upName" clearable :placeholder="updateShop.inputName1" @change="getShop" :disabled='typeId'>
+          <el-form-item :label="updateShop.name1" prop="upName" class="myitem" value-key="id">
+            <el-select v-model="addform.type" clearable :placeholder="updateShop.inputName1" @change="getShop" :disabled='typeId' value-key="id">
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="updateShop.name2" prop="name" class="myitem">
-            <el-select v-model="addform.id" clearable :placeholder="updateShop.name2" :disabled="typeId">
+          <el-form-item :label="updateShop.name2" prop="id" class="myitem" value-key="id">
+            <el-select v-model="addform.id" clearable :placeholder="updateShop.name2" :disabled="typeId" value-key="id">
               <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==1">
+          <!-- <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==1">
             <el-input
               placeholder="请输入商品规格如： 300ml"
               v-model="addform.standName"
               clearable>
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==2">
               <el-select v-model="addform.standName" @change = "num" clearable placeholder="选择商品规格">
                 <el-option v-for="item in addform.standardsModelList" :key="item.id" :label="item.name" :value="item.name" :disabled="item.type"></el-option>
@@ -363,15 +363,7 @@
               message: '已取消删除'
             });          
           });
-        // this.$api("delshop",{params:{id:scope.id}}).then((res)=>{
-
-        // })
       },
-      // get() {
-      //   this.$api('addStandards',{commodityid:"38",name:"300ml",price:"99"}).then((res)=>{
-      //     console.log(res);
-      //   })
-      // },
        save () {//保存
         this.dialogVisible = false
         if(this.actionType==1){
@@ -452,7 +444,7 @@
             console.log(this.classShop)
             if(this.classShop[i].type) {
               // console.log(this.classShop[i].type)
-              this.classShop[i].type = false;
+              this.classShop[i].type = true;
               console.log(this.dis)
             }else{
               this.classShop[i].type = false;
@@ -519,7 +511,7 @@
       edit (myCode) {
         // debugger;        //编辑商品
         this.typeId =true;
-        // console.log(myCode.row)
+        console.log(myCode.row)
         this.dialogVisible = true;
         this.actionType=2;
         var row =  myCode.row;
