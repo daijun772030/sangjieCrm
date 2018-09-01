@@ -63,13 +63,9 @@
               <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==1">
-            <el-input
-              placeholder="请输入商品规格如： 300ml"
-              v-model="addform.standName"
-              clearable>
-            </el-input>
-          </el-form-item> -->
+          <el-form-item prop="remark" label="商家公告：" class="myitem" >
+            <el-input clearable autosize type="textarea" placeholder= "输入公告信息" v-model="addform.remark" size="large" class="myInput"></el-input>
+          </el-form-item>
           <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==2">
               <el-select v-model="addform.standName" @change = "num" clearable placeholder="选择商品规格">
                 <el-option v-for="item in addform.standardsModelList" :key="item.id" :label="item.name" :value="item.name" :disabled="item.type"></el-option>
@@ -91,6 +87,7 @@
           <el-button type="primary" @click="save">保存</el-button>
         </span>
       </el-dialog>
+      
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="standDisc" :show-close="false" width="900px">
         <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
           <el-form-item label="商品类型" prop="upName" class="myitem" >
@@ -127,6 +124,7 @@
           <el-button type="primary" @click="save">保存</el-button>
         </span>
       </el-dialog>
+
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="myDisable" :show-close="false" width="900px">
         <el-form :inline="true" :model="tableData" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
           <el-form-item label="产品类型：" prop="higherup" class="myitem">
@@ -232,7 +230,8 @@
           price:null,
           standPrice:null,
           standName:null,
-          standardsModelList:null
+          standardsModelList:null,
+          remark:null
         },
         shopType:[],//商品类型
         classShop:[],//根据商品类型获得相应的商品
@@ -254,16 +253,16 @@
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload(file) {//图片上传函数
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isJPG = /image\/[jpeg|jpg|png]/.test(file.type);
+          const isLt1M = file.size / 1024 / 1024 < 10;
 
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
+          if (!isJPG) {
+          this.$message.error("上传LOGO图片格式应为jpeg|jpg|png!");
+          }
+          if (!isLt1M) {
+          this.$message.error("上传LOGO图片大小不能超过 10MB!");
+          }
+          return isJPG && isLt1M;
       }, 
       ImgClose (tableData) {//添加商品类型的函数
         this.myDisable = false;
@@ -367,9 +366,7 @@
        save () {//保存
         this.dialogVisible = false
         if(this.actionType==1){
-           console.log(this.addform)
-          // debugger;
-            this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
+            this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:this.addform.remark}).then((res)=>{
             if(res.data.retCode!==200) {
             this.$message(res.data.message)
             }else{

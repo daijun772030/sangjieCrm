@@ -79,6 +79,12 @@ const apis = {
     //商户后台登录的接口
     login: post('/merchant/login'),
     cancellation: get('/merchant/cancellation'),
+    //商家认证信息
+    archivesAll: get("/archives/all"),
+    //查询商家个人基本信息
+    merchantChange: get("/merchant/order/findByMerchantidDetail"),
+    //修改商家个人信息
+    updataByMer: post("/archives/updateByMerchant"),
     //注册送好礼接口
     network: post('/archives/network'),
     //商品接口

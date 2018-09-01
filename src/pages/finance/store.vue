@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import List from './list.js'
+// import List from './list.js'
 export default {
   data () {
     return {
@@ -63,7 +63,7 @@ export default {
       },
       DelogImage:null,//大图展示图片
       title:"店铺图片详情",
-      list:List.list,
+      list:null,
       searchObj:{
         pageSzie:10,
         pageNum:1,
@@ -138,12 +138,16 @@ export default {
       console.log(this.DelogImage)
     },
     handleSizeChange (val) {
+      this.searchObj.pageSize = val;
       console.log(val)
-    }
-  },
-  handleCurrentChange (val) {
+    },
+    handleCurrentChange (val) {
+    this.searchObj.pageNum = val;
     console.log(val)
   }
+  
+  }
+  
 }
 </script>
 <style long="less">

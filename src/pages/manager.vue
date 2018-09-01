@@ -35,8 +35,7 @@ export default {
     //   login
     },
     created() {
-        // debugger;
-        this.$router.replace({ path: '/manager/finance/aptitude' });
+        // // debugger;
     }
 }
 </script>

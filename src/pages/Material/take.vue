@@ -26,7 +26,7 @@
       <el-table-column prop="actualMoney" align="center" label="应付金额"></el-table-column>
       <el-table-column  align="center" label="商家打折"></el-table-column>
       <el-table-column prop="discountMoney" align="center" label="平台满减"></el-table-column>
-      <el-table-column prop="account" align="center" label="实付金额"></el-table-column>
+      <el-table-column prop="money" align="center" label="实付金额"></el-table-column>
       <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
       <el-table-column
         align="center"
@@ -79,7 +79,7 @@ export default {
     this.orderAll();
     this.timer = setInterval(()=>{
        this.orderAll();
-    },100000);
+    },600000);
   },
   beforeUpdate () {
     this.$watch("newTotalCount",function(val) {

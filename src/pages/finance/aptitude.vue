@@ -1,6 +1,6 @@
 <template>
   <div class="aptitude">
-    <el-table class="activity-table"  border :data="list">
+    <el-table class="activity-table" height="calc(100% - 50px)" border :data="list">
       <el-table-column prop="license" label="营业执照图片" align="center">
         <template slot-scope="scope">
           <img :src="'/test' + scope.row.license" alt="营业执照图片" @click="License(scope)" class="itemImage">
@@ -18,6 +18,16 @@
       </el-table-column>
       <el-table-column prop="legalName" label="法人姓名" align="center"></el-table-column>
       <el-table-column prop="legalId" label="法人身份证号" align="center"></el-table-column>
+      <el-table-column prop="shopName" label="商铺名称" align="center" class="colum"></el-table-column>
+      <el-table-column prop="address" label="商铺地址" align="center" class="colum"></el-table-column>
+      <el-table-column prop="contact" label="联系人" align="center" class="colum"></el-table-column>
+      <el-table-column prop="contactPhone" label="联系电话" align="center" class="colum"></el-table-column>
+      <el-table-column prop="logo" label="店铺图片" align="center" class="colum">
+        <template slot-scope="scope">
+          <img :src="'/test' + scope.row.logo" alt="店铺图片" @click="image(scope)" class="itemImage">
+          <!-- <button type="text" class="button" >大图</button> -->
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button type="text" @click="remove(scope.row)" size="mini" >通过</el-button>
@@ -82,13 +92,18 @@ export default {
   },
   created () {
     this.getAll()
+    // this.timer = setInterval(() =>{
+    //   this.getAll();
+    // },200000)
   },
+  
   methods:{
     getAll () {
       this.$api("archives",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
         var resList = res.data.data.list
-      // this.list = res.data.data.list;
-      for(var i = 0;i<resList.length;i++) {
+      this.list = res.data.data.list;
+      console.log(res)
+      for(let i = 0;i<resList.length;i++) {
         if(resList[i].status==0){
           this.list.push(resList[i])
         }
@@ -172,12 +187,21 @@ export default {
     height: 50px;
     vertical-align: middle;
   }
+  .activity-table{
+    width:100%;
+  }
   .imge img {
     width: auto;
     height: auto;
     max-width: 100%;
     max-height: 100%; 
   }
+  .pageination{
+    margin-top: 10px;
+  }
 </style>
+<style long="less" scoped>
+</style>
+
 
 

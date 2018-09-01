@@ -8,12 +8,12 @@ const Manager = () =>
     import ('@/pages/manager' /* webpackChunkName: "pages/manager" */ ).then(m => m.default || m)
 const Login = () =>
     import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
-const Fanance = () =>
-    import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance/finance" */ ).then(m => m.default || m)
+    // const Fanance = () =>
+    //     import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance/finance" */ ).then(m => m.default || m)
 const Aptitude = () =>
-    import ('@/pages/finance/aptitude/aptitude' /* webpackChunkName: "pages/finance/aptitude/aptitude" */ ).then(m => m.default || m)
-const Store = () =>
-    import ('@/pages/finance/store/store' /* webpackChunkName: "pages/finance/store/store" */ ).then(m => m.default || m)
+    import ('@/pages/finance/aptitude' /* webpackChunkName: "pages/finance/aptitude" */ ).then(m => m.default || m)
+    // const Store = () =>
+    //     import ('@/pages/finance/store' /* webpackChunkName: "pages/finance/store" */ ).then(m => m.default || m)
 const Invitation = () =>
     import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
 const Examine = () =>
@@ -30,6 +30,8 @@ const Take = () =>
     import ('@/pages/Material/take' /* webpackChunkName: "pages/Material/take" */ )
 const Upshop = () =>
     import ('@/pages/Material/upshop' /* webpackChunkName: "pages/Material/upshop" */ )
+const Consumable = () =>
+    import ('@/pages/Material/consumable' /* webpackChunkName: "pages/Material/consumable" */ )
 const Financial = () =>
     import ('@/pages/shopOrder/financial' /* webpackChunkName: "pages/shopOrder/financial" */ )
 const OrderSystem = () =>
@@ -77,15 +79,9 @@ const router = new Router({
                 name: 'manager',
                 path: 'manager',
                 component: Manager,
-                children: [{
-                        name: 'finance',
-                        path: 'finance',
-                        component: Fanance,
-                        children: [
-                            { name: 'finance-aptitude', path: 'aptitude', component: Aptitude },
-                            { name: 'finance-store', path: 'store', component: Store }
-                        ]
-                    },
+                children: [
+                    { name: 'finance', path: 'finance', component: Aptitude },
+                    { name: 'finance-aptitude', path: 'aptitude', component: Aptitude },
                     {
                         name: 'invitation',
                         path: 'invitation',
@@ -101,6 +97,7 @@ const router = new Router({
                     { name: 'material-deliver', path: 'deliver', component: Deliver },
                     { name: 'material-refunded', path: 'refunded', component: Refunded },
                     { name: 'material-upshop', path: 'upshop', component: Upshop },
+                    { name: 'material-consumable', path: 'consumable', component: Consumable },
                     { name: 'shopOrder', path: 'shopOrder', component: OrderSystem },
                     { name: 'shopOrder-orderSystem', path: 'orderSystem', component: OrderSystem },
                     { name: 'shopOrder-financial', path: 'financial', component: Financial },
