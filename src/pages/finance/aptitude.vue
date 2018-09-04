@@ -104,9 +104,9 @@ export default {
       this.list = res.data.data.list;
       console.log(res)
       for(let i = 0;i<resList.length;i++) {
-        if(resList[i].status==0){
-          this.list.push(resList[i])
-        }
+        // if(resList[i].status==0){
+        //   this.list.push(resList[i])
+        // }
       }
       this.searchObj.pageNum = res.data.data.pageNum;
       this.searchObj.pageSize = res.data.data.pageSize;

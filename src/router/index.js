@@ -116,8 +116,8 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
-    console.log(to);
-    console.log(from);
+    // console.log(to);
+    // console.log(from);
     // debugger;
     clearInterval(this.timer)
     next()

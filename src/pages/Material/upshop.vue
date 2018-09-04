@@ -63,8 +63,8 @@
               <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="remark" label="商家公告：" class="myitem" >
-            <el-input clearable autosize type="textarea" placeholder= "输入公告信息" v-model="addform.remark" size="large" class="myInput"></el-input>
+          <el-form-item prop="remark" label="详细信息：" class="myitem" >
+            <el-input clearable autosize type="textarea" placeholder= "输入商品详细信息" v-model="addform.remark" size="large" class="myInput"></el-input>
           </el-form-item>
           <el-form-item label="商品规格" prop="standName" class="myitem" v-if="this.actionType==2">
               <el-select v-model="addform.standName" @change = "num" clearable placeholder="选择商品规格">
@@ -72,7 +72,7 @@
               </el-select>
           </el-form-item>
           <el-form-item v-if="addform.standName==null" :label="updateShop.name3" prop="price" class="myitem">
-            <el-input type="text" :placeholder="updateShop.name3" @blur="input1" v-model="addform.price" >
+            <el-input type="text" :placeholder="updateShop.name3" v-model="addform.price" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
@@ -90,7 +90,7 @@
       
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="standDisc" :show-close="false" width="900px">
         <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
-          <el-form-item label="商品类型" prop="upName" class="myitem" >
+          <el-form-item label="商品类型：" prop="upName" class="myitem" >
             <el-input
               placeholder="商品类型"
               v-model="addform.upName"
@@ -98,7 +98,7 @@
               clearable>
             </el-input>
           </el-form-item>
-          <el-form-item label="商品名称" prop="name" class="myitem">
+          <el-form-item label="商品名称：" prop="name" class="myitem">
             <el-input
               placeholder="商品名称"
               v-model="addform.name"
@@ -106,14 +106,18 @@
               clearable>
             </el-input>
           </el-form-item>
-          <el-form-item label="商品规格" prop="standName" class="myitem">
+          <el-form-item label="商品规格：" prop="standName" class="myitem1">
             <el-input
-              placeholder="请输入商品规格如： 300ml"
-              v-model="addform.standName"
+              class="newInput"
+              placeholder="商品规格"
+              v-model="standNameNum"
               clearable>
             </el-input>
+            <el-select class="newSelect" v-model="unitCh" clearable placeholder="单位" size="mini">
+              <el-option v-for="item in unit" :key="item.id" :label="item.name" :value="item.name" :disabled="item.type"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="规格价格" prop="standPrice" class="myitem">
+          <el-form-item label="规格价格：" prop="standPrice" class="myitem">
             <el-input type="text" placeholder="填写该规格商品价格"  v-model="addform.standPrice" >
               <template slot="append">元</template>
             </el-input> 
@@ -171,10 +175,14 @@
     </div>
 </template>
 <script>
-  // import GoodsObj from './goods1.js'
+  // import GoodsObj from ' ./unit.js '
+import unit from './unit.js';
   export default {
     data () {
       return {
+        standNameNum:null,
+        unit:unit.unit,
+        unitCh:null,
         standDisc:false,//添加规格弹框状态     
         imageUrl:null,//上传图片img的地址
         imgType:{
@@ -264,13 +272,17 @@
           }
           return isJPG && isLt1M;
       }, 
-      ImgClose (tableData) {//添加商品类型的函数
+      ImgClose (tableData) {//添加商品类型的函数取消函数
         this.myDisable = false;
         // console.log(tableData)
         for(var i = 0;i<tableData.length;i++) {
           tableData[i].name = null;
           tableData[i].higherup = null;
         }
+      },
+      ImgSave (tableData) {//
+
+
       },
       addtype() {//添加商品的按钮
         this.myDisable = true;
@@ -366,7 +378,7 @@
        save () {//保存
         this.dialogVisible = false
         if(this.actionType==1){
-            this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:this.addform.remark}).then((res)=>{
+            this.$api("addshop",{typeid:this.addform.id, price:this.addform.price,remark:this.addform.remark}).then((res)=>{
             if(res.data.retCode!==200) {
             this.$message(res.data.message)
             }else{
@@ -398,6 +410,7 @@
           }
           this.ces()
         }else if(this.actionType == 4) {
+            this.addform.standName = this.standNameNum + "/" + this.unitCh
              this.$api('addStandards',{commodityid:this.addform.id,name:this.addform.standName,price:this.addform.standPrice}).then((res)=>{
               if(res.data.retCode!==200) {
               this.$message('添加规格失败')
@@ -531,6 +544,13 @@
   .myitem{
     padding: 30px 0;
   }
+  .myitem1{
+    padding: 30px 0;
+    width: 50%
+  }
+  .myitem1>.el-form-item__content {
+    width: 60%;
+  }
   .goods{
         width: 100%;
         height:100%;
@@ -541,8 +561,15 @@
   .searchForm{
       padding: 10px;
   }
+  .newInput{
+    display: inline-block;
+    width: 60%;
+  }
+  .newSelect{
+    display: inline-block;
+    width: 30%;
+  }
   .form{
-   
     padding: 10px 0;
     text-align: center;
     display: flex;

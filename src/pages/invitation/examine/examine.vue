@@ -195,6 +195,11 @@ export default {
     height: 50px;
     padding-top: 30px;
   }
+  .itemImage{
+   height: 100%;
+   width: 100%; 
+  }
+
 </style>
 <style>
 </style>
