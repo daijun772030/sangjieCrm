@@ -38,6 +38,10 @@ const OrderSystem = () =>
     import ('@/pages/shopOrder/orderSystem' /* webpackChunkName: "pages/shopOrder/orderSystem" */ )
 const RefundOrder = () =>
     import ('@/pages/refund/refundOrder' /* webpackChunkName: "pages/refund/refundOrder" */ )
+const AddShopType = () =>
+    import ('@/pages/addShop/addShopType' /* webpackChunkName: "pages/addShop/addShopType" */ )
+const AddConsumable = () =>
+    import ('@/pages/addShop/addConsumable' /* webpackChunkName: "pages/addShop/addConsumable" */ )
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -102,7 +106,10 @@ const router = new Router({
                     { name: 'shopOrder-orderSystem', path: 'orderSystem', component: OrderSystem },
                     { name: 'shopOrder-financial', path: 'financial', component: Financial },
                     { name: 'refund', path: 'refund', component: RefundOrder },
-                    { name: 'refund-refundOrder', path: 'RefundOrder', component: RefundOrder }
+                    { name: 'refund-refundOrder', path: 'RefundOrder', component: RefundOrder },
+                    { name: 'addShop-addShopType', path: 'addShopType', component: AddShopType },
+                    { name: 'addShop-addConsumable', path: 'AddConsumable', component: AddConsumable }
+
                 ]
             }
         ]

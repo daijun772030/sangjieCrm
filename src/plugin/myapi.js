@@ -98,11 +98,15 @@ const apis = {
     updateByStandards: post('/type/updateByStandards'),
     //耗材删除商品规格
     deleteStand: post('/type/deleteByStandards'),
-    //添加产品的类型
-    addByType: get("/type/addByType"),
+    //添加产品的图片
+    addByType: post("/type/addByType"),
+    //添加产品类型
+    addByTypeOne: post('/type/addByTypeOne'),
     //商品类型
     typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
+    typeFindOne: get('/type/findByTypeHigherupOne'), //根据一级下单栏查询下级公司后台
     typeStatus: get('/type/findByTypeStatus'), //查询一级下单栏
+    typeStatusOne: get('/type/findByTypeStatusOne'), //查询一级下单栏公司后台
     //优惠活动
     discountAll: get('/discount/all'), //查询所有优惠
     discountAddDis: post('/discount/addDiscount'), //新增打折优惠

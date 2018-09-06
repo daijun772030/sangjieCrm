@@ -53,5 +53,15 @@ export default [{
             { id: 1, name: "商家退款", path: "refundOrder", icon: "resource" }
         ]
     },
+    {
+        id: '4',
+        name: '添加商品类型',
+        path: 'addShop',
+        icon: 'resource',
+        children: [
+            { id: 1, name: "添加洗衣类型", path: "addShopType", icon: "resource" },
+            { id: 2, name: "添加耗材类型", path: "addConsumable", icon: "resource" }
+        ]
+    }
 
 ];
