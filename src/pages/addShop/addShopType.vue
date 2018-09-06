@@ -174,6 +174,7 @@ import unit from './unit.js';
           return isJPG && isLt1M;
       }, 
       ImgClose (tableData) {//添加商品类型的函数取消函数
+      this.imageUrl = null;
         this.myDisable = false;
         // console.log(tableData)
         for(var i = 0;i<tableData.length;i++) {
