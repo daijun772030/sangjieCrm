@@ -40,12 +40,14 @@
           </el-form-item>
           <el-form-item label="上传产品图片：">
             <el-upload
+            ref="upload"
               name="img"
               :data="tableData"
               class="avatar-uploader"
               action="/api/type/addByType"
               :show-file-list="true"
               :on-success="handleAvatarSuccess"
+              :on-remove="fileList"
               :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i><br>
@@ -158,6 +160,9 @@ import unit from './unit.js';
       // this.clasShop();
     },
     methods: {
+      fileList() {//上传成功以后删除图片
+        
+      },
       handleAvatarSuccess(res, file) {//图片上传函数
         this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -174,15 +179,21 @@ import unit from './unit.js';
           return isJPG && isLt1M;
       }, 
       ImgClose (tableData) {//添加商品类型的函数取消函数
+        this.fileList();
       this.imageUrl = null;
         this.myDisable = false;
         // console.log(tableData)
-        for(var i = 0;i<tableData.length;i++) {
-          tableData[i].name = null;
-          tableData[i].higherup = null;
+        for(var i = 0;i<this.tableData.length;i++) {
+          this.tableData[i].name = null;
+          this.tableData[i].higherup = null;
+
         }
       },
       ImgSave (tableData) {//确认添加类型
+        this.fileList();
+        this.imageUrl =null;
+        this.tableData.name =null;
+        this.tableData.higherup=null;
         if(tableData.higherup==null) {
           this.$api('addByTypeOne',{name:this.GetName,higherup:"0",status:'1'}).then((res)=>{
             console.log(res);
@@ -349,6 +360,7 @@ import unit from './unit.js';
         this.standDisc = false;
         for(var i in addform) {
           addform[i] = null;
+          addform.status = '2';
         }
       },
       changeValue (value) {//这里获取搜索框的id

@@ -46,6 +46,7 @@
               action="/api/type/addByType"
               :show-file-list="true"
               :on-success="handleAvatarSuccess"
+              :on-remove="fileList"
               :before-upload="beforeAvatarUpload">
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i><br>
@@ -158,6 +159,9 @@ import unit from './unit.js';
       // this.clasShop();
     },
     methods: {
+      fileList() {//上传成功以后删除图片
+        
+      },
       handleAvatarSuccess(res, file) {//图片上传函数
         this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -175,6 +179,7 @@ import unit from './unit.js';
       }, 
       ImgClose (tableData) {//添加商品类型的函数取消函数
         this.myDisable = false;
+        this.fileList();
         // console.log(tableData)
         for(var i = 0;i<tableData.length;i++) {
           tableData[i].name = null;
@@ -182,6 +187,10 @@ import unit from './unit.js';
         }
       },
       ImgSave (tableData) {//确认添加类型
+        this.fileList();
+        this.imageUrl =null;
+        this.tableData.name =null;
+        this.tableData.higherup=null;
         if(tableData.higherup==null) {
           this.$api('addByTypeOne',{name:this.GetName,higherup:"0",status:'3'}).then((res)=>{
             console.log(res);
@@ -348,6 +357,7 @@ import unit from './unit.js';
         this.standDisc = false;
         for(var i in addform) {
           addform[i] = null;
+          addform.status = '4';
         }
       },
       changeValue (value) {//这里获取搜索框的id
