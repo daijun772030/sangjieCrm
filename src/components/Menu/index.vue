@@ -2,15 +2,15 @@
     <div class="menu">
         <div class="log">
             <!-- <img :src="image" alt="" style="height: 50px"> -->
-            尚洁科技logo
+            懒猪到家
         </div>
         <div class="menu-list">
             <el-menu
-                default-active="index"
+                :default-active="currentPath"
+                :router="true"
                 class="menu-list-el"
                 text-color="#fff"
                 :unique-opened="true"
-                @select="select"
             >
                 <el-submenu
                     class="sub"
@@ -48,20 +48,18 @@
         data() {
             return {
                 list: list,
-                image:Img
+                image:Img,
+                currentPath: 'index'
             }
         },
         created() {
+            this.currentPath = this.$route.path;
             this.getList();
         },
         methods: {
             // 获取导航列表
             getList() {
                 // this.$api('get_menu');
-            },
-            // 选中事件,根据indexPath的路径匹配路由
-            select(index, indexPath) {
-                this.$router.push({ name: indexPath.join('-') });
             }
         }
     }
@@ -72,6 +70,7 @@
         height: 50px;
         color: white;
         text-align:center;
+        font-size: 26px;
         line-height: 50px;
     }
     .menu{

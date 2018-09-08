@@ -54,7 +54,7 @@ export default [{
         ]
     },
     {
-        id: '4',
+        id: '5',
         name: '添加商品类型',
         path: 'addShop',
         icon: 'resource',

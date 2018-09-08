@@ -15,13 +15,28 @@ export default {
     methods : {
         async showPage(){
             // debugger;
-            this.$api("typeFind",{id:'1'}).then(res => {
-                if(res.data.retCode !== -200) this.index = "manager";
-                this.$router.replace({ path: this.index });
+            const that = this;
+            this.$api("typeStatus",{params:{status:"3"}}).then(res => {
+                // 已登录
+                const { path } = that.$route;
+                if(res.data.retCode == 200) {
+                    // debugger;
+                    if(path === '/') {
+                        that.$router.replace({ path: "/manager" });
+                    }else {
+                        that.$router.replace({ path });
+                    }
+                }else {
+                    that.$router.replace({ path: "/login" });
+                }
             // const { token } = res;
             // localStorage.setItem('token', token);
+            }).catch(error => {
+                this.$message({
+                    message: '接口错误，请刷新页面',
+                    center: true
+                });
             });
-            this.$router.replace({ path : this.index });
         }
     }
 }

@@ -14,10 +14,10 @@ const Aptitude = () =>
     import ('@/pages/finance/aptitude' /* webpackChunkName: "pages/finance/aptitude" */ ).then(m => m.default || m)
     // const Store = () =>
     //     import ('@/pages/finance/store' /* webpackChunkName: "pages/finance/store" */ ).then(m => m.default || m)
-const Invitation = () =>
-    import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
+    // const Invitation = () =>
+    //     import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
 const Examine = () =>
-    import ('@/pages/invitation/examine/examine' /* webpackChunkName: "pages/invitation/examine/examine" */ )
+    import ('@/pages/invitation/examine' /* webpackChunkName: "pages/invitation/examine" */ )
 const Accomplish = () =>
     import ('@/pages/Material/accomplish' /* webpackChunkName: "pages/Material/accomplish" */ )
 const Activity = () =>
@@ -42,6 +42,8 @@ const AddShopType = () =>
     import ('@/pages/addShop/addShopType' /* webpackChunkName: "pages/addShop/addShopType" */ )
 const AddConsumable = () =>
     import ('@/pages/addShop/addConsumable' /* webpackChunkName: "pages/addShop/addConsumable" */ )
+const page404 = () =>
+    import ('@/pages/error/404' /* webpackChunkName: "/pages/error/404" */ ).then(m => m.default || m)
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -84,34 +86,26 @@ const router = new Router({
                 path: 'manager',
                 component: Manager,
                 children: [
-                    { name: 'finance', path: 'finance', component: Aptitude },
-                    { name: 'finance-aptitude', path: 'aptitude', component: Aptitude },
-                    {
-                        name: 'invitation',
-                        path: 'invitation',
-                        component: Invitation,
-                        children: [
-                            { name: 'invitation-examine', path: 'examine', component: Examine }
-                        ]
-                    },
-                    { name: 'material', path: 'material', component: Take },
-                    { name: 'material-take', path: 'material', component: Take },
-                    { name: 'material-accomplish', path: 'accomplish', component: Accomplish },
-                    { name: 'material-activity', path: 'activity', component: Activity },
-                    { name: 'material-deliver', path: 'deliver', component: Deliver },
-                    { name: 'material-refunded', path: 'refunded', component: Refunded },
-                    { name: 'material-upshop', path: 'upshop', component: Upshop },
-                    { name: 'material-consumable', path: 'consumable', component: Consumable },
-                    { name: 'shopOrder', path: 'shopOrder', component: OrderSystem },
-                    { name: 'shopOrder-orderSystem', path: 'orderSystem', component: OrderSystem },
-                    { name: 'shopOrder-financial', path: 'financial', component: Financial },
-                    { name: 'refund', path: 'refund', component: RefundOrder },
-                    { name: 'refund-refundOrder', path: 'RefundOrder', component: RefundOrder },
-                    { name: 'addShop-addShopType', path: 'addShopType', component: AddShopType },
-                    { name: 'addShop-addConsumable', path: 'AddConsumable', component: AddConsumable }
-
+                    { name: 'finance', path: '/manager/finance', component: Aptitude },
+                    { name: 'finance-aptitude', path: '/manager/aptitude', component: Aptitude },
+                    { name: 'invitation-examine', path: '/manager/examine', component: Examine },
+                    { name: 'material-take', path: '/manager/material', component: Take },
+                    { name: 'material-accomplish', path: '/manager/accomplish', component: Accomplish },
+                    { name: 'material-activity', path: '/manager/activity', component: Activity },
+                    { name: 'material-deliver', path: '/manager/deliver', component: Deliver },
+                    { name: 'material-refunded', path: '/manager/refunded', component: Refunded },
+                    { name: 'material-upshop', path: '/manager/upshop', component: Upshop },
+                    { name: 'material-consumable', path: '/manager/consumable', component: Consumable },
+                    { name: 'shopOrder', path: '/manager/shopOrder', component: OrderSystem },
+                    { name: 'shopOrder-orderSystem', path: '/manager/orderSystem', component: OrderSystem },
+                    { name: 'shopOrder-financial', path: '/manager/financial', component: Financial },
+                    { name: 'refund', path: '/manager/refund', component: RefundOrder },
+                    { name: 'refund-refundOrder', path: '/manager/RefundOrder', component: RefundOrder },
+                    { name: 'addShop-addShopType', path: '/manager/addShopType', component: AddShopType },
+                    { name: 'addShop-addConsumable', path: '/manager/AddConsumable', component: AddConsumable }
                 ]
-            }
+            },
+            { name: '404', path: '/*', component: page404 }
         ]
     }]
 });

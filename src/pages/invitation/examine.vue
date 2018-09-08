@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import ExamineObj from './examine1.js'
+import ExamineObj from './dddd.js'
 export default {
   data () {
     return {

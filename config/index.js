@@ -19,7 +19,7 @@ module.exports = {
                 }
             },
             '/test': {
-                target: "http://192.168.0.124:8081/",
+                target: "http://39.108.113.149:8081/",
                 changeOrigin: true, // 是否跨域
                 pathRewrite: {
                     '^/test': ''
