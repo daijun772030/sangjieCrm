@@ -68,7 +68,7 @@ import Hashes from 'jshashes'
             console.log(res)
             var message = res.data.message
           if(res.data.retCode==200) {
-              if(res.data.data.type==2){
+              if(res.data.data.type==0){
                   this.$router.replace({ path : this.manager });
                   return
               }else{

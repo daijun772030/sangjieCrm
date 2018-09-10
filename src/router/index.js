@@ -17,31 +17,33 @@ const Aptitude = () =>
     // const Invitation = () =>
     //     import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
 const Examine = () =>
-    import ('@/pages/invitation/examine' /* webpackChunkName: "pages/invitation/examine" */ )
+    import ('@/pages/invitation/examine' /* webpackChunkName: "pages/invitation/examine" */ ).then(m => m.default || m)
 const Accomplish = () =>
-    import ('@/pages/Material/accomplish' /* webpackChunkName: "pages/Material/accomplish" */ )
+    import ('@/pages/Material/accomplish' /* webpackChunkName: "pages/Material/accomplish" */ ).then(m => m.default || m)
 const Activity = () =>
-    import ('@/pages/Material/activity' /* webpackChunkName: "pages/Material/activity" */ )
+    import ('@/pages/Material/activity' /* webpackChunkName: "pages/Material/activity" */ ).then(m => m.default || m)
 const Deliver = () =>
-    import ('@/pages/Material/deliver' /* webpackChunkName: "pages/Material/deliver" */ )
+    import ('@/pages/Material/deliver' /* webpackChunkName: "pages/Material/deliver" */ ).then(m => m.default || m)
 const Refunded = () =>
-    import ('@/pages/Material/refunded' /* webpackChunkName: "pages/Material/refunded" */ )
+    import ('@/pages/Material/refunded' /* webpackChunkName: "pages/Material/refunded" */ ).then(m => m.default || m)
 const Take = () =>
-    import ('@/pages/Material/take' /* webpackChunkName: "pages/Material/take" */ )
+    import ('@/pages/Material/take' /* webpackChunkName: "pages/Material/take" */ ).then(m => m.default || m)
 const Upshop = () =>
-    import ('@/pages/Material/upshop' /* webpackChunkName: "pages/Material/upshop" */ )
+    import ('@/pages/Material/upshop' /* webpackChunkName: "pages/Material/upshop" */ ).then(m => m.default || m)
 const Consumable = () =>
-    import ('@/pages/Material/consumable' /* webpackChunkName: "pages/Material/consumable" */ )
+    import ('@/pages/Material/consumable' /* webpackChunkName: "pages/Material/consumable" */ ).then(m => m.default || m)
 const Financial = () =>
-    import ('@/pages/shopOrder/financial' /* webpackChunkName: "pages/shopOrder/financial" */ )
+    import ('@/pages/shopOrder/financial' /* webpackChunkName: "pages/shopOrder/financial" */ ).then(m => m.default || m)
 const OrderSystem = () =>
-    import ('@/pages/shopOrder/orderSystem' /* webpackChunkName: "pages/shopOrder/orderSystem" */ )
+    import ('@/pages/shopOrder/orderSystem' /* webpackChunkName: "pages/shopOrder/orderSystem" */ ).then(m => m.default || m)
 const RefundOrder = () =>
-    import ('@/pages/refund/refundOrder' /* webpackChunkName: "pages/refund/refundOrder" */ )
+    import ('@/pages/refund/refundOrder' /* webpackChunkName: "pages/refund/refundOrder" */ ).then(m => m.default || m)
 const AddShopType = () =>
-    import ('@/pages/addShop/addShopType' /* webpackChunkName: "pages/addShop/addShopType" */ )
+    import ('@/pages/addShop/addShopType' /* webpackChunkName: "pages/addShop/addShopType" */ ).then(m => m.default || m)
 const AddConsumable = () =>
-    import ('@/pages/addShop/addConsumable' /* webpackChunkName: "pages/addShop/addConsumable" */ )
+    import ('@/pages/addShop/addConsumable' /* webpackChunkName: "pages/addShop/addConsumable" */ ).then(m => m.default || m)
+const Advertising = () =>
+    import ('@/pages/advertising/advertising' /* webpackChunkName: "pages/advertising/advertising" */ ).then(m => m.default || m)
 const page404 = () =>
     import ('@/pages/error/404' /* webpackChunkName: "/pages/error/404" */ ).then(m => m.default || m)
 Vue.use(Router);
@@ -89,7 +91,7 @@ const router = new Router({
                     { name: 'finance', path: '/manager/finance', component: Aptitude },
                     { name: 'finance-aptitude', path: '/manager/aptitude', component: Aptitude },
                     { name: 'invitation-examine', path: '/manager/examine', component: Examine },
-                    { name: 'material-take', path: '/manager/material', component: Take },
+                    { name: 'material-take', path: '/manager/take', component: Take },
                     { name: 'material-accomplish', path: '/manager/accomplish', component: Accomplish },
                     { name: 'material-activity', path: '/manager/activity', component: Activity },
                     { name: 'material-deliver', path: '/manager/deliver', component: Deliver },
@@ -102,7 +104,8 @@ const router = new Router({
                     { name: 'refund', path: '/manager/refund', component: RefundOrder },
                     { name: 'refund-refundOrder', path: '/manager/RefundOrder', component: RefundOrder },
                     { name: 'addShop-addShopType', path: '/manager/addShopType', component: AddShopType },
-                    { name: 'addShop-addConsumable', path: '/manager/AddConsumable', component: AddConsumable }
+                    { name: 'addShop-addConsumable', path: '/manager/AddConsumable', component: AddConsumable },
+                    { name: 'advertising-advertising', path: '/manager/advertising', component: Advertising },
                 ]
             },
             { name: '404', path: '/*', component: page404 }
@@ -117,6 +120,7 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
+    // debugger;
     // console.log(to);
     // console.log(from);
     // debugger;

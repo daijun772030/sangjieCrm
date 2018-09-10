@@ -59,7 +59,7 @@
         :total="searchObj.totalCount">
       </el-pagination>
     </div>
-    <audio src="../../../../static/audio/newgoods.mp3"  id="music" hidden></audio>
+    <audio src="/static/audio/newgoods.mp3"  :id="music" hidden></audio>
   </div>
 </template>
 <script>
@@ -67,6 +67,7 @@ import ExamineObj from './dddd.js'
 export default {
   data () {
     return {
+      music:'music',
       arrObj:[],
       autoplay:'',
       playFlay:false,
@@ -92,13 +93,14 @@ export default {
   },
   created () {
     this.query();
-    // this.timer = setInterval(()=>{
-    //    this.query();
-    // },6000);
+    this.timer = setInterval(()=>{
+       this.query();
+    },1000000);
   },
   
   beforeUpdate () {
     this.$watch("newTotalCount",function(val) {
+      debugger;
       this.$nextTick(function(){
         var audio = document.getElementById('music');
         audio.play();
@@ -144,6 +146,7 @@ export default {
 
         if(res.data.retCode==200) {
           this.$message("删除成功")
+          this.music = 'music2';
         }else{
           this.$message("删除失败")
         }

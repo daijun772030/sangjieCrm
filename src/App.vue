@@ -6,7 +6,7 @@
 export default {
     data(){
         return {
-            index : "manager"
+            index : "manager "
         }
     },
     created(){
@@ -16,7 +16,7 @@ export default {
         async showPage(){
             // debugger;
             const that = this;
-            this.$api("typeStatus",{params:{status:"3"}}).then(res => {
+            this.$api("typeStatus",{params:{status:"2"}}).then(res => {
                 // 已登录
                 const { path } = that.$route;
                 if(res.data.retCode == 200) {

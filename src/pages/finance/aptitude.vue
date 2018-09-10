@@ -92,22 +92,22 @@ export default {
   },
   created () {
     this.getAll()
-    // this.timer = setInterval(() =>{
-    //   this.getAll();
-    // },200000)
   },
   
   methods:{
     getAll () {
+      // debugger;
       this.$api("archives",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
-        var resList = res.data.data.list
       this.list = res.data.data.list;
-      console.log(res)
-      for(let i = 0;i<resList.length;i++) {
-        if(resList[i].status==0){
-          this.list.push(resList[i])
+      var mustList=[];
+      for(let i=0;i<this.list.length;i++) {
+        if(this.list[i].status == 0){
+          mustList.push(this.list[i]);
         }
       }
+      this.list = mustList;
+      console.log(res)
+      
       this.searchObj.pageNum = res.data.data.pageNum;
       this.searchObj.pageSize = res.data.data.pageSize;
       this.searchObj.totalCount = res.data.data.total;

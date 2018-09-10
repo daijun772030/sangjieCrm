@@ -79,8 +79,6 @@ const apis = {
     //商户后台登录的接口
     login: post('/merchant/login'),
     cancellation: get('/merchant/cancellation'),
-    //商家认证信息
-    archivesAll: get("/archives/all"),
     //查询商家个人基本信息
     merchantChange: get("/merchant/order/findByMerchantidDetail"),
     //修改商家个人信息
@@ -102,6 +100,12 @@ const apis = {
     addByType: post("/type/addByType"),
     //添加产品类型
     addByTypeOne: post('/type/addByTypeOne'),
+    //添加广告的banner
+    addBanner: post('/banner/addBanner'),
+    //查询所有的banner
+    allBanner: get('/banner/all'),
+    //删除所有banner
+    deleBanner: get('/banner/deleteBanner'),
     //商品类型
     typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
     typeFindOne: get('/type/findByTypeHigherupOne'), //根据一级下单栏查询下级公司后台
