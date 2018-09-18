@@ -4,11 +4,24 @@ export default [{
         path: "/manager/finance",
         icon: "resource",
         children: [{
-            id: 0,
-            name: "商家资质详情",
-            path: "/manager/aptitude",
-            icon: "resource"
-        }]
+                id: 0,
+                name: "商家资质审核",
+                path: "/manager/aptitude",
+                icon: "resource"
+            },
+            {
+                id: 1,
+                name: "资质审核通过",
+                path: "/manager/pass",
+                icon: "resource"
+            },
+            {
+                id: 2,
+                name: "资质审核未通过",
+                path: "/manager/NoPass",
+                icon: "resource"
+            }
+        ]
     },
     {
         id: "1",

@@ -16,27 +16,30 @@ export default {
         async showPage(){
             // debugger;
             const that = this;
-            this.$api("typeStatus",{params:{status:"2"}}).then(res => {
-                // 已登录
-                const { path } = that.$route;
-                if(res.data.retCode == 200) {
-                    // debugger;
-                    if(path === '/') {
-                        that.$router.replace({ path: "/manager" });
-                    }else {
-                        that.$router.replace({ path });
-                    }
-                }else {
-                    that.$router.replace({ path: "/login" });
-                }
-            // const { token } = res;
-            // localStorage.setItem('token', token);
-            }).catch(error => {
-                this.$message({
-                    message: '接口错误，请刷新页面',
-                    center: true
-                });
-            });
+            const {path} = that.$route;
+            if(path === '/') {
+                that.$router.replace({ path: "/manager" });
+            }else {
+                that.$router.replace({ path });
+            }
+            // this.$api("typeStatus",{params:{status:"2"}}).then(res => {
+            //     // 已登录
+            //     const { path } = that.$route;
+            //     if(res.data.retCode == 200) {
+            //         // debugger;
+                    
+            //         }
+            //     }else {
+            //         that.$router.replace({ path: "/manager" });
+            //     }
+            // // const { token } = res;
+            // // localStorage.setItem('token', token);
+            // }).catch(error => {
+            //     this.$message({
+            //         message: '接口错误，请刷新页面',
+            //         center: true
+            //     });
+            // });
         }
     }
 }

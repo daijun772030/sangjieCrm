@@ -1,8 +1,7 @@
 <template>
     <div class="menu">
         <div class="log">
-            <!-- <img :src="image" alt="" style="height: 50px"> -->
-            懒猪到家
+            <img :src="image" alt="" >
         </div>
         <div class="menu-list">
             <el-menu
@@ -43,12 +42,12 @@
 </template>
 <script>
     import list from './list';
-    import Img from '~/static/images/logo.png'
+    import img from './images/houtai_logo.png'
     export default {
         data() {
             return {
                 list: list,
-                image:Img,
+                image:img,
                 currentPath: 'index'
             }
         },
@@ -67,11 +66,22 @@
 <style lang="less" scoped>
     .log {
         width: 100%;
-        height: 50px;
+        height: 60px;
         color: white;
         text-align:center;
-        font-size: 26px;
-        line-height: 50px;
+        line-height: 60px;
+        background-color:#494f60;
+        display: flex;
+        flex-direction:column;
+        justify-content: space-around;
+        align-items: center;
+
+    }
+    .log>img{
+        width:80%;
+        height: auto;
+        max-width:100%;
+        // padding: 5px 0;
     }
     .menu{
         position: absolute;

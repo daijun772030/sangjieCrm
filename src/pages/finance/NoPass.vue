@@ -33,12 +33,12 @@
           <!-- <button type="text" class="button" >大图</button> -->
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="200">
+      <!-- <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button type="text" @click="remove(scope.row)" size="mini" >通过</el-button>
           <el-button type="text" @click="del(scope.row)" size="mini">不通过</el-button>
         </template> 
-      </el-table-column> 
+      </el-table-column>  -->
     </el-table>
     <div class="pageination">
       <el-pagination
@@ -106,7 +106,7 @@ export default {
       this.list = res.data.data.list;
       var mustList=[];
       for(let i=0;i<this.list.length;i++) {
-        if(this.list[i].status == 0){
+        if(this.list[i].status == 2){
           mustList.push(this.list[i]);
         }
       }
@@ -134,8 +134,8 @@ export default {
       console.log(this.DelogImage)
     },
     close(pass){//弹窗消失
-      this.pass.passText=null;
-      this.pass.passVisible=false;
+      pass.passText=null;
+      pass.passVisible=false
     },
     IdPositive (scope) {
       this.dialogTableVisible = true;
@@ -173,7 +173,6 @@ export default {
         this.title="审核不通过原因"
     },
     updata(){
-      this.pass.passVisible=false;
       this.$api("upArchives",{status:'2', remark:this.pass.passText, id:this.pass.id}).then((res)=>{
         if(res.data.retCode==200){
           this.$message.error("审核未通过")

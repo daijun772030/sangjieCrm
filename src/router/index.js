@@ -12,8 +12,10 @@ const Login = () =>
     //     import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance/finance" */ ).then(m => m.default || m)
 const Aptitude = () =>
     import ('@/pages/finance/aptitude' /* webpackChunkName: "pages/finance/aptitude" */ ).then(m => m.default || m)
-    // const Store = () =>
-    //     import ('@/pages/finance/store' /* webpackChunkName: "pages/finance/store" */ ).then(m => m.default || m)
+const Pass = () =>
+    import ('@/pages/finance/pass' /* webpackChunkName: "pages/finance/pass" */ ).then(m => m.default || m)
+const NoPass = () =>
+    import ('@/pages/finance/NoPass' /* webpackChunkName: "pages/finance/NoPass" */ ).then(m => m.default || m)
     // const Invitation = () =>
     //     import ('@/pages/invitation/invitation' /* webpackChunkName: "pages/invitation/invitation" */ )
 const Examine = () =>
@@ -90,6 +92,8 @@ const router = new Router({
                 children: [
                     { name: 'finance', path: '/manager/finance', component: Aptitude },
                     { name: 'finance-aptitude', path: '/manager/aptitude', component: Aptitude },
+                    { name: 'finance-pass', path: '/manager/pass', component: Pass },
+                    { name: 'finance-NoPass', path: '/manager/NoPass', component: NoPass },
                     { name: 'invitation-examine', path: '/manager/examine', component: Examine },
                     { name: 'material-take', path: '/manager/take', component: Take },
                     { name: 'material-accomplish', path: '/manager/accomplish', component: Accomplish },
